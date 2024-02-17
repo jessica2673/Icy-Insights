@@ -7,6 +7,26 @@ const upload = multer();
 
 const client = new Client({});
 
+async function getGoogleRoutes(start, end) {
+    try {
+        const response = await client.directions({
+            params: {
+                origin: start,
+                destination: end,
+                alternatives: true,
+                key: keys.maps.mapsAPI
+            },
+            timeout: 10000
+        })
+
+        console.log(response.data.routes);
+
+        return response.data.routes;
+    } catch (e) {
+        console.log('Error: ' + e);
+    }
+}
+
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
     let geoJsonResponse = await fetch(api);
@@ -36,16 +56,16 @@ async function getPlowedData(points) {
         return false;
     });
 
-    console.log(filteredFeatures); // debug
     return filteredFeatures;
 }
 
 
 router.get('/temp', async (req, res) => {
+    const {start, end} = req.query;
     console.log('temp reached');
-    const bbPoints = await boundingBox(req.query.start, req.query.end);
+    const bbPoints = await boundingBox(start, end);
     const plowedPaths = await getPlowedData(bbPoints);
-    console.log(plowedPaths);
+    const routes = await getGoogleRoutes(start, end);
     res.status(200).json(plowedPaths.length);
 })
 
@@ -73,14 +93,12 @@ async function boundingBox(start, end) {
         'lngMin' : minLng, 
         'lngMax' : maxLng
     };
-    console.log(points);
+
     return points;
 }
 
 router.post("/plowRoutes", upload.none(), async (req, res) => { 
-    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)
-    console.log(coords); 
-    
+    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)   
 });
 
 router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
