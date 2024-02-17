@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
-import { TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Button } from '@mui/material';
 import { InputLabel } from '@mui/material';
+import SearchBar from './SearchBar'
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../Theme.jsx'; 
+import theme from '../../Theme.jsx';
 import axios from 'axios'
 import { useThemeVariants } from '@mui/styles';
 
@@ -47,22 +48,34 @@ const Search = () => {
 
     formData.append("start", startLocation);
     formData.append("end", destination);
-    
+
     await sendData(formData);
   }
-  
+
+  const handleSearchResult = (result) => {
+    setStartLocation(result["Formatted "])
+  };
+
   return (
     <ThemeProvider theme={theme}>
-    <div className='search-container'>
-      <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
-      <InputLabel></InputLabel>
-        <TextField id="location" label="Starting Location" variant='filled' sx={{}} onChange={(e) => setStartLocation(e.target.value)}/>
+      <div className='search-container'>
+        <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
+          <SearchBar
+            onSearchResult={(e) => setStartLocation(e)}
+            searchLabel="Starting Location"
+          />
+          <br></br>
+          <SearchBar
+            onSearchResult={(e) => setDestination(e)}
+            searchLabel="Destination"
+          />
+          <br></br>
 
-        <InputLabel></InputLabel>
-        <TextField id="destination" label="Destination"  onChange={(e) => setDestination(e.target.value)}/>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </form>
+      </div>
     </ThemeProvider>
   );
 }
