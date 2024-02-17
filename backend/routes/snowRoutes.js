@@ -3,7 +3,6 @@ const router = express.Router();
 const multer = require('multer');
 const upload = multer();
 const keys = require('../config/keys');
-import locationToCoords from '../server';
 
 router.get("/", (req, res) => {
     res.json('snow');

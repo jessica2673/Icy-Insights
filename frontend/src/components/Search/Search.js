@@ -20,6 +20,15 @@ const Search = () => {
         }
       })
 
+      const response2 = await axios({
+        method: "POST",
+        url: "/map/computeDefaultRoutes",
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
       if (await !response.ok) {
         console.log(response.error);
       }
