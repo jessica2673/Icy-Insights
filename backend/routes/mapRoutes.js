@@ -37,38 +37,7 @@ router.get('/temp', async (req, res) => {
     await getPlowedData();
 })
 
-router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
-    // computeAlternativeRoutes is always true, start and end are addresses
-    const { start, end, computeAlternativeRoutes } = req.body;
-    const travelMode = "drive";
-
-    if (!start || !end) {
-        res.status(400).status("Missing required location inputs!");
-    }
-
-    try {
-        const response = client.directions({
-            params: {
-                start: start,
-                end: end,
-                mode: travelMode,
-                alternatives: computeAlternativeRoutes,
-                key: keys.maps.mapsAPI,
-            },
-            timeout: 10000,
-        })
-    } catch {
-        console.error(error);
-        res.status(500).send('Error computing path')
-    }
-});
-
-router.post("/plowRoutes", upload.none(), async (req, res) => { 
-    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)
-    console.log(coords); 
-    
-});
-
+// box for filtering
 async function boundingBox(start, end) {
     const oCoords = await locationToCoords(start);
     const dCoords = await locationToCoords(end);
@@ -103,8 +72,36 @@ async function boundingBox(start, end) {
     return points;
 }
 
-async function filterPoints(points, ) {
+router.post("/plowRoutes", upload.none(), async (req, res) => { 
+    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)
+    console.log(coords); 
+    
+});
 
-}
+router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
+    // computeAlternativeRoutes is always true, start and end are addresses
+    const { start, end, computeAlternativeRoutes } = req.body;
+    const travelMode = "drive";
+
+    if (!start || !end) {
+        res.status(400).status("Missing required location inputs!");
+    }
+
+    try {
+        const response = client.directions({
+            params: {
+                start: start,
+                end: end,
+                mode: travelMode,
+                alternatives: computeAlternativeRoutes,
+                key: keys.maps.mapsAPI,
+            },
+            timeout: 10000,
+        })
+    } catch {
+        console.error(error);
+        res.status(500).send('Error computing path')
+    }
+});
 
 module.exports = router;
