@@ -13,7 +13,14 @@ const config = {
   secret: keys.auth0.secret,
   baseURL: 'http://localhost:3000',
   clientID: 'MLUc1mDRS9b3aL0KgkLZhYA8fFglGjID',
-  issuerBaseURL: 'https://dev-uqqt354ibszasep8.us.auth0.com'
+  issuerBaseURL: 'https://dev-uqqt354ibszasep8.us.auth0.com',
+  afterCallBack: (req, res, session, decodedState) => {
+    if (req.oidc.isAuthenticated()) {
+        return res.redirect(loginSuccess);
+    } else {
+        return res.redirect(loginError);
+    }
+  }
 };
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
@@ -21,7 +28,7 @@ router.use(auth(config));
 
 // req.isAuthenticated is provided from the auth router
 router.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+    res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
 });
 
 app.get('/profile', requiresAuth(), (req, res) => {
