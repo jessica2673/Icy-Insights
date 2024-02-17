@@ -7,24 +7,6 @@ const upload = multer();
 
 const client = new Client({});
 
-// Convert location in string format to latitude and longitude
-async function locationToCoords(location) {
-    const api = `${keys.maps.url}${location}&key=${keys.maps.mapsAPI}`;
-    let response = await fetch(api);
-    if (await !response.ok) {
-      console.log(response.error);
-    } else {
-      response = await response.json();
-    }
-  
-    const locationObject = await response.results[0].geometry.location;
-    if (!locationObject) {
-      console.log('Cannot obtain location.');
-    } else {
-      return await locationObject;
-    }
-}
-
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
     let geoJsonResponse = await fetch(api);
@@ -63,6 +45,7 @@ router.get('/temp', async (req, res) => {
     console.log('temp reached');
     const bbPoints = await boundingBox(req.query.start, req.query.end);
     const plowedPaths = await getPlowedData(bbPoints);
+    console.log(plowedPaths);
     res.status(200).json(plowedPaths.length);
 })
 

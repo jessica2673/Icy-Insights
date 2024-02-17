@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react';
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
 
+
 //const libraries = ['routes'];
 const mapContainerStyle = {
   position: "absolute",
   top: "0px",
   left: "0px",
   right: "0px",
-  bottom: "0px"
+  bottom: "0px", 
 };
 
 
@@ -24,7 +25,7 @@ const Map = () => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       setLocation({ lat, lng }); // Update state as an object
-      console.log(typeof(location));
+      
     }
   
     function error() {
@@ -42,8 +43,8 @@ const Map = () => {
   
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY
-    //libraries,
+    googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
+    libraries: ['places']
   });
 
   if (loadError) {
@@ -56,13 +57,15 @@ const Map = () => {
 
   return (
     <div>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={15}
-        center={location}
-      >
-        <MarkerF position={location} />
-      </GoogleMap>
+      
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={15}
+          center={location}
+        >
+          <MarkerF position={location} icon={"https://maps.google.com/mapfiles/ms/icons/blue-dot.png"}/>
+        </GoogleMap>
+     
     </div>
   );
   }
