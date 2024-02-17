@@ -101,30 +101,4 @@ router.post("/plowRoutes", upload.none(), async (req, res) => {
     waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)   
 });
 
-router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
-    // computeAlternativeRoutes is always true, start and end are addresses
-    const { start, end, computeAlternativeRoutes } = req.body;
-    const travelMode = "drive";
-
-    if (!start || !end) {
-        res.status(400).status("Missing required location inputs!");
-    }
-
-    try {
-        const response = client.directions({
-            params: {
-                start: start,
-                end: end,
-                mode: travelMode,
-                alternatives: computeAlternativeRoutes,
-                key: keys.maps.mapsAPI,
-            },
-            timeout: 10000,
-        })
-    } catch {
-        console.error(error);
-        res.status(500).send('Error computing path')
-    }
-});
-
 module.exports = router;
