@@ -4,7 +4,7 @@ import { InputLabel } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme.jsx'; 
 import axios from 'axios'
-import { useThemeVariants } from '@mui/styles';
+
 
 const Search = () => {
   const [startLocation, setStartLocation] = useState('');
@@ -63,12 +63,12 @@ const Search = () => {
     <ThemeProvider theme={theme}>
     <div className='search-container'>
       <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
-      <InputLabel></InputLabel>
-        <TextField id="location" label="Starting Location" variant='filled' sx={} onChange={(e) => setStartLocation(e.target.value)}/>
+      
+        <TextField id="location" label="Starting Location" variant='filled' sx={{backgroundColor: 'background.paper'}} onChange={(e) => setStartLocation(e.target.value)}/>
 
-        <InputLabel></InputLabel>
-        <TextField id="destination" label="Destination"  onChange={(e) => setDestination(e.target.value)}/>
-        <button type="submit">Submit</button>
+      
+        <TextField id="destination" label="Destination" sx={{backgroundColor: 'background.paper'}} onChange={(e) => setDestination(e.target.value)}/>
+        <button type="submit" sx={{backgroundColor: 'secondary.main'}}>Submit</button>
       </form>
     </div>
     </ThemeProvider>

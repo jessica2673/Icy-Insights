@@ -1,30 +1,27 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import { InputLabel, TextField } from '@mui/material';
+import { Button, InputLabel, TextField } from '@mui/material';
+import Map from './components/Map/Map';
 
 // Define a theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#383F51',
+      main: '#5d6a7d',
     },
     secondary: {
-      main: '#DDDBF1',
-    },
-    error: {
-      main: '#3C4F76',
-    },
-    success: {
-      main: '#419D78',
-    },
-    warning: {
-      main: '#BFCC94',
+      main: '#6a9a97',
     },
     background: {
-      default: '#DDDBF1',
+      default: '#fcffff',
+      paper: '#f1f6f5',
+    },
+    text: {
+      primary: '#4061a0',
     },
   },
+
   typography: {
     fontWeightBold: 700, // Example property
    
@@ -58,8 +55,6 @@ const theme = createTheme({
         },
       },
     },
-    // Since TextField uses the Input component under the hood for the "filled" variant,
-    // you might want to customize MuiFilledInput specifically for your TextFields
     MuiFilledInput: {
       styleOverrides: {
         root: {
@@ -104,6 +99,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <InputLabel/>
       <TextField/>
+      <Button/>
+      <Map/>
     </ThemeProvider>
   );
 }
