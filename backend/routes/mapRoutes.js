@@ -7,37 +7,15 @@ const upload = multer();
 
 const client = new Client({});
 
-// Convert location in string format to latitude and longitude
-async function locationToCoords(location) {
-    const api = `${keys.maps.url}${location}&key=${keys.maps.mapsAPI}`;
-    let response = await fetch(api);
-    if (await !response.ok) {
-      console.log(response.error);
-    } else {
-      response = await response.json();
-    }
-  
-    const locationObject = await response.results[0].geometry.location;
-    if (!locationObject) {
-      console.log('Cannot obtain location.');
-    } else {
-      return await locationObject;
-    }
-}
-
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
     let geoJsonResponse = await fetch(api); // returns a large amount of data
-    if (await !geoJsonResponse.ok) {
-        console.log(geoJsonResponse.error);
-    } else {
-        geoJsonResponse = await geoJsonResponse.json();
-    }
+    const geoJson = await geoJsonResponse.json();
 
-    const latMin = -79.54;
-    const latMax = -79.20;
-    const lngMin = 43.60;
-    const lngMax = 43.67;
+    const latMin = points.latMin - 0.2;
+    const latMax = points.latMax + 0.2;
+    const lngMin = points.lngMin - 0.2;
+    const lngMax = points.lngMax + 0.2;
 
     const isWithinBounds = (coordinates) => { // coordinates is an array, so check if some of those points are within the bounds
         return coordinates.some(coordinate => {
@@ -45,7 +23,7 @@ async function getPlowedData(points) {
         });
     };
 
-    const filteredPoints = (geoJsonResponse.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
+    const filteredPoints = (geoJson.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
 
     return filteredPoints;
 }
@@ -54,17 +32,12 @@ router.get('/temp', async (req, res) => {
     console.log('temp reached');
     const bbPoints = await boundingBox(req.query.start, req.query.end);
     const plowedPaths = await getPlowedData(bbPoints);
+    console.log(plowedPaths);
     res.status(200).json(plowedPaths.length);
 })
 
 // box for filtering
 async function boundingBox(start, end) {
-    // const oCoords = await locationToCoords(st    art);
-    // const dCoords = await locationToCoords(end);
-    // const coords = {
-    //     start: oCoords,
-    //     end: dCoords
-    // }
 
     // create bounding box + 1000m, filter
     maxLat = Math.max(start.lat, end.lat);
