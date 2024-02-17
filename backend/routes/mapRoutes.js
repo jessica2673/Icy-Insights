@@ -69,7 +69,7 @@ router.post("/plowRoutes", upload.none(), async (req, res) => {
     
 });
 
-async function nearbyWaypoints(start, end) {
+async function boundingBox(start, end) {
     const oCoords = await locationToCoords(start);
     const dCoords = await locationToCoords(end);
     const coords = {
@@ -94,7 +94,12 @@ async function nearbyWaypoints(start, end) {
     maxLng += expandLng; 
     minLng -= expandLng; 
 
-    const points = await filterPoints({minLat, maxLat, minLng, maxLng});
+    const points = {
+        'latMin' : minLat, 
+        'latMax' : maxLat, 
+        'lngMin' : minLng, 
+        'lngMax' : maxLng
+    };
     return points;
 }
 
