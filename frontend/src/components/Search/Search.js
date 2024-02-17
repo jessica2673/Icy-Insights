@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import { TextField } from '@mui/material';
-//import { Input } from '@mui/material';
 import { InputLabel } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '../../Theme.jsx'; 
 import axios from 'axios'
+import { useThemeVariants } from '@mui/styles';
 
 const Search = () => {
   const [startLocation, setStartLocation] = useState('');
@@ -50,16 +52,18 @@ const Search = () => {
   }
   
   return (
+    <ThemeProvider theme={theme}>
     <div className='search-container'>
       <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
-        <InputLabel></InputLabel>
-        <TextField id="location" label="Starting Location" variant="filled" onChange={(e) => setStartLocation(e.target.value)}/>
+      <InputLabel></InputLabel>
+        <TextField id="location" label="Starting Location" variant='filled' sx={} onChange={(e) => setStartLocation(e.target.value)}/>
 
         <InputLabel></InputLabel>
-        <TextField id="destination" label="Destination" variant="filled" onChange={(e) => setDestination(e.target.value)}/>
+        <TextField id="destination" label="Destination"  onChange={(e) => setDestination(e.target.value)}/>
         <button type="submit">Submit</button>
       </form>
     </div>
+    </ThemeProvider>
   );
 }
 
