@@ -1,20 +1,41 @@
 import React from 'react';
+import { useState } from 'react'; 
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
-const keys = require('../../../../backend/config/keys.js');
 
-//const libraries = [];
+
+//const libraries = ['routes'];
 const mapContainerStyle = {
-  width: '100vw',
-  height: '100vh',
+  position: "absolute",
+  top: "0px",
+  left: "0px",
+  right: "0px",
+  bottom: "0px"
 };
-const center = {
-  lat: 43.7723504, // default latitude
-  lng: -79.5068685, // default longitude
-};
+
 
 const Map = () => {
+
+  const [location, setLocation] = useState(null);
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(success, error)
+  } else {
+    console.log("Geolocation not supported");
+  }
+  
+  function success(position){
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    setLocation(latitude, longitude);
+    console.log(location);
+  }
+  
+  function error() {
+    console.log("Unable to retrieve your location");
+  }
+
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: keys.maps.mapsAPI,
+    googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY
     //libraries,
   });
 
@@ -31,9 +52,9 @@ const Map = () => {
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={15}
-        center={center}
+        center={location}
       >
-        <MarkerF position={{lat: 43.7723504, lng: -79.5068685}} />
+        <MarkerF position={{location}} />
       </GoogleMap>
     </div>
   );

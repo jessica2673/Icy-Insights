@@ -1,6 +1,6 @@
 import Map from "./components/Map/Map";
-import SignIn from "./components/SignIn/SignIn";
-import SignUp from "./components/SignUp/SignUp"
+import SignIn from "./pages/SignIn/SignIn";
+import SignUp from "./pages/SignUp/SignUp"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
