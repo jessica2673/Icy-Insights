@@ -9,24 +9,37 @@ const client = new Client({});
 
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
-    let geoJsonResponse = await fetch(api); // returns a large amount of data
-    const geoJson = await geoJsonResponse.json();
+    let geoJsonResponse = await fetch(api);
+    if (!geoJsonResponse.ok) {
+        console.log(geoJsonResponse.error);
+        return;
+    }
+    geoJsonResponse = await geoJsonResponse.json();
 
-    const latMin = points.latMin - 0.2;
-    const latMax = points.latMax + 0.2;
-    const lngMin = points.lngMin - 0.2;
-    const lngMax = points.lngMax + 0.2;
-
-    const isWithinBounds = (coordinates) => { // coordinates is an array, so check if some of those points are within the bounds
-        return coordinates.some(coordinate => {
-            return (coordinate[0] >= latMin && coordinate[0] <= latMax && coordinate[1] >= lngMin && coordinate[1] <= lngMax);
-        });
+    const isWithinBounds = (coordinate) => {
+        return (
+            coordinate[0] >= points.lngMin && coordinate[0] <= points.lngMax &&
+            coordinate[1] >= points.latMin && coordinate[1] <= points.latMax
+        );
     };
 
-    const filteredPoints = (geoJson.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
+    const filteredFeatures = geoJsonResponse.features.filter(feature => {
+        // always linestring for To data
+        if (feature.geometry.type === "LineString") {
+            return feature.geometry.coordinates.some(coords => {
+                if (feature.geometry.type === "Polygon") {
+                    return coords.some(ring => ring.some(isWithinBounds));
+                }
+                return isWithinBounds(coords);
+            });
+        }
+        return false;
+    });
 
-    return filteredPoints;
+    console.log(filteredFeatures); // debug
+    return filteredFeatures;
 }
+
 
 router.get('/temp', async (req, res) => {
     console.log('temp reached');
@@ -38,8 +51,6 @@ router.get('/temp', async (req, res) => {
 
 // box for filtering
 async function boundingBox(start, end) {
-
-    // create bounding box + 1000m, filter
     maxLat = Math.max(start.lat, end.lat);
     minLat = Math.min(start.lat, end.lat);
     maxLng = Math.max(start.lng, end.lng);
