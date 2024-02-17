@@ -1,4 +1,4 @@
-import Map from "./components/Map/Map";
+import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -12,7 +12,7 @@ function App() {
             path="/"
             element={<Navigate to="/home" replace />}
           />
-          <Route path="/home" element={<Map />}/>
+          <Route path="/home" element={<Home />}/>
           <Route path="/sign-in" element={<SignIn />}/>
           <Route path="/sign-up" element={<SignUp />}/>
         </Routes>
