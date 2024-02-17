@@ -3,7 +3,7 @@ import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { CssBaseline, IconButton, Button, Box, Skeleton, SwipeableDrawer, Card } from '@mui/material';
+import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card } from '@mui/material';
 import Search from '../Search/Search'
 
 const drawerBleeding = 56;
