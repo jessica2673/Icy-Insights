@@ -5,11 +5,14 @@ const keys = require('./config/keys.js');
 
 // routes
 const snowRoute = require('./routes/snowRoutes.js');
+const userRoute = require('./routes/userRoutes.js');
+const mapRoute = require('./routes/mapRoutes.js');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
+
 // Connect to MongoDB
 mongoose.connect(keys.mongo.dbURI)
   .then((result) => {
@@ -27,4 +30,5 @@ app.listen(PORT, () => {
 
 app.use('/test', () => {console.log('test works')});
 app.use('/snow', snowRoute);
-
+app.use('/user', userRoute);
+app.use('/map', mapRoute);
