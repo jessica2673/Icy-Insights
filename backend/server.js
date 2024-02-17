@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const keys = require('./config/keys.js');
 
+// routes
+const snowRoute = require('./routes/snowRoutes.js');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(cors());
@@ -23,3 +26,5 @@ app.listen(PORT, () => {
 });
 
 app.use('/test', () => {console.log('test works')});
+app.use('/snow', snowRoute);
+
