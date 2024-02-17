@@ -25,7 +25,7 @@ const Map = () => {
       const lat = position.coords.latitude;
       const lng = position.coords.longitude;
       setLocation({ lat, lng }); // Update state as an object
-      console.log(typeof(location));
+      
     }
   
     function error() {

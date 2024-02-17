@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
-import { TextField } from '@mui/material';
-import { InputLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { Button } from '@mui/material';
+import SearchBar from './SearchBar'
 import { ThemeProvider } from '@mui/material/styles';
-import theme from '../../Theme.jsx'; 
+import theme from '../../Theme.jsx';
 import axios from 'axios'
 
 
@@ -22,27 +22,19 @@ const Search = () => {
         }
       })
 
-      if (await !response.ok) {
-        console.log(response.error);
-      }
-
       const pathCoords = response.data;
+      console.log("pathCoords");
       console.log(pathCoords);
       const pathResponse = await axios({
         method: "GET",
-        url: "/map/temp"
+        url: "/map/temp",
+        params: {
+          start: pathCoords.start,
+          end: pathCoords.end
+        }
       });
 
-      console.log(pathResponse);
-
-      const response2 = await axios({
-        method: "POST",
-        url: "/map/computeDefaultRoutes",
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      console.log(await pathResponse.data); // contains all the 
 
     } catch (e) {
       console.log(e);
@@ -55,22 +47,36 @@ const Search = () => {
 
     formData.append("start", startLocation);
     formData.append("end", destination);
-    
+
     await sendData(formData);
   }
-  
+
+  const handleSearchResult = (result) => {
+    setStartLocation(result["Formatted "])
+  };
+
   return (
     <ThemeProvider theme={theme}>
-    <div className='search-container'>
-      <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
-      
-        <TextField id="location" label="Starting Location" variant='filled' sx={{backgroundColor: 'background.paper'}} onChange={(e) => setStartLocation(e.target.value)}/>
+      <div className='search-container'>
+        <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
+          <SearchBar
+            onSearchResult={(e) => setStartLocation(e)}
+            searchLabel="Starting Location"
+            sx={{backgroundColor: 'background.paper'}}
+          />
+          <br></br>
+          <SearchBar
+            onSearchResult={(e) => setDestination(e)}
+            searchLabel="Destination"
+            sx={{backgroundColor: 'background.paper'}}
+          />
+          <br></br>
 
-      
-        <TextField id="destination" label="Destination" sx={{backgroundColor: 'background.paper'}} onChange={(e) => setDestination(e.target.value)}/>
-        <button type="submit" sx={{backgroundColor: 'secondary.main'}}>Submit</button>
-      </form>
-    </div>
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </form>
+      </div>
     </ThemeProvider>
   );
 }
