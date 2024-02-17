@@ -9,14 +9,13 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 function App() {
   return (
     <div>
-      
-        
+    
         <BrowserRouter>
           <Routes>
-            {/* <Route
-              path="*"
+            {<Route
+              path="/"
               element={<Navigate to="/home" replace />}
-            /> */}
+            />}
             <Route path="/home" element={<Home />}/>
             <Route path="/sign-in" element={<SignIn />}/>
             <Route path="/sign-up" element={<SignUp />}/>
