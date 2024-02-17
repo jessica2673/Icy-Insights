@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import App from './App';
-
 import axios from 'axios'
+import App from './App';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
