@@ -20,7 +20,7 @@ mongoose.connect(keys.mongo.dbURI)
       console.log(err);
   });
 
-    // Define routes and middleware
+// Define routes and middleware
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
