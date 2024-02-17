@@ -56,7 +56,7 @@ const Search = () => {
     <div className='search-container'>
       <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
       <InputLabel></InputLabel>
-        <TextField id="location" label="Starting Location" variant='filled' sx={} onChange={(e) => setStartLocation(e.target.value)}/>
+        <TextField id="location" label="Starting Location" variant='filled' onChange={(e) => setStartLocation(e.target.value)}/>
 
         <InputLabel></InputLabel>
         <TextField id="destination" label="Destination"  onChange={(e) => setDestination(e.target.value)}/>

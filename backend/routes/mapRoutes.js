@@ -27,28 +27,37 @@ async function locationToCoords(location) {
 
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
-    let geoJsonResponse = await fetch(api); // returns a large amount of data
-    if (await !geoJsonResponse.ok) {
+    let geoJsonResponse = await fetch(api);
+    if (!geoJsonResponse.ok) {
         console.log(geoJsonResponse.error);
-    } else {
-        geoJsonResponse = await geoJsonResponse.json();
+        return;
     }
+    geoJsonResponse = await geoJsonResponse.json();
 
-    const latMin = -79.54;
-    const latMax = -79.20;
-    const lngMin = 43.60;
-    const lngMax = 43.67;
-
-    const isWithinBounds = (coordinates) => { // coordinates is an array, so check if some of those points are within the bounds
-        return coordinates.some(coordinate => {
-            return (coordinate[0] >= latMin && coordinate[0] <= latMax && coordinate[1] >= lngMin && coordinate[1] <= lngMax);
-        });
+    const isWithinBounds = (coordinate) => {
+        return (
+            coordinate[0] >= points.lngMin && coordinate[0] <= points.lngMax &&
+            coordinate[1] >= points.latMin && coordinate[1] <= points.latMax
+        );
     };
 
-    const filteredPoints = (geoJsonResponse.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
+    const filteredFeatures = geoJsonResponse.features.filter(feature => {
+        // always linestring for To data
+        if (feature.geometry.type === "LineString") {
+            return feature.geometry.coordinates.some(coords => {
+                if (feature.geometry.type === "Polygon") {
+                    return coords.some(ring => ring.some(isWithinBounds));
+                }
+                return isWithinBounds(coords);
+            });
+        }
+        return false;
+    });
 
-    return filteredPoints;
+    console.log(filteredFeatures); // debug
+    return filteredFeatures;
 }
+
 
 router.get('/temp', async (req, res) => {
     console.log('temp reached');
@@ -59,14 +68,6 @@ router.get('/temp', async (req, res) => {
 
 // box for filtering
 async function boundingBox(start, end) {
-    // const oCoords = await locationToCoords(st    art);
-    // const dCoords = await locationToCoords(end);
-    // const coords = {
-    //     start: oCoords,
-    //     end: dCoords
-    // }
-
-    // create bounding box + 1000m, filter
     maxLat = Math.max(start.lat, end.lat);
     minLat = Math.min(start.lat, end.lat);
     maxLng = Math.max(start.lng, end.lng);
