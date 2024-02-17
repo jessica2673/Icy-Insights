@@ -2,8 +2,8 @@ import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn/SignIn";
 import SignUp from "./pages/SignUp/SignUp";
 import Search from "./components/Search/Search"
-//import { ThemeProvider } from "@mui/material";
-//import theme from './Theme'; // Import the theme
+import { createTheme, ThemeProvider } from "@mui/material";
+import theme from './Theme'; // Import the theme
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
