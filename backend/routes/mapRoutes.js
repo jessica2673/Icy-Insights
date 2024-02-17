@@ -7,21 +7,20 @@ const upload = multer();
 
 const client = new Client({});
 
-router.post('/computeDefaultRoutes', (req, res) => {
-    console.log('hi');
+router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
     // computeAlternativeRoutes is always true, start and end are addresses
-    const { origin, destination, computeAlternativeRoutes } = req.body;
+    const { start, end, computeAlternativeRoutes } = req.body;
     const travelMode = "drive";
 
-    if (!origin || !destination) {
+    if (!start || !end) {
         res.status(400).status("Missing required location inputs!");
     }
 
     try {
         const response = client.directions({
             params: {
-                origin: start,
-                destination: end,
+                start: start,
+                end: end,
                 mode: travelMode,
                 alternatives: computeAlternativeRoutes,
                 key: keys.maps.mapsAPI,
@@ -40,15 +39,37 @@ router.post("/plowRoutes", upload.none(), async (req, res) => {
     
 });
 
-async function nearbyWaypoints(origin, destination) {
-    const oCoords = await locationToCoords(origin);
-    const dCoords = await locationToCoords(destination);
+async function nearbyWaypoints(start, end) {
+    const oCoords = await locationToCoords(start);
+    const dCoords = await locationToCoords(end);
     const coords = {
         start: oCoords,
         end: dCoords
     }
 
-    // create bounding box
+    // create bounding box + 1000m, filter
+    maxLat = Math.max(oCoords.lat, dCoords.lat);
+    minLat = Math.min(oCoords.lat, dCoords.lat);
+    maxLng = Math.max(oCoords.lng, dCoords.lng);
+    minLng = Math.ming(oCoords.lng, dCoords.lng);
+
+    // latitude + longitude conversion to 1km leeway
+    const expandLat = 0.009;
+    maxLat += expandLat;
+    minLat -= expandLat;
+
+    // latitude based on location
+    const avgLat = (maxLat + minLat) / 2;
+    const expandLng = 1 / (111.32 * Math.cos(avgLat * (Math.PI / 180))); 
+    maxLng += expandLng; 
+    minLng -= expandLng; 
+
+    const points = await filterPoints({minLat, maxLat, minLng, maxLng});
+    return points;
+}
+
+async function filterPoints(points, ) {
+
 }
 
 module.exports = router;
