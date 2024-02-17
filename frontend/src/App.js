@@ -1,12 +1,11 @@
-
-import Test from './components/SignIn/SignIn';
+import Search from './components/Search/Search';
 
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Test/>
+        <Search/>
       </header>
     </div>
   );
