@@ -1,6 +1,7 @@
-import Map from "./components/Map/Map";
+import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn/SignIn";
-import SignUp from "./pages/SignUp/SignUp"
+import SignUp from "./pages/SignUp/SignUp";
+import Search from "./components/Search/Search"
 import { ThemeProvider } from "@mui/material";
 import theme from './Theme'; // Import the theme
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -13,13 +14,14 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/"
+              path="*"
               element={<Navigate to="/home" replace />}
             />
-            <Route path="/home" element={<Map />}/>
+            <Route path="/home" element={<Home />}/>
             <Route path="/sign-in" element={<SignIn />}/>
             <Route path="/sign-up" element={<SignUp />}/>
-          </Routes>
+            <Route path="/search" element={<Search />}/>
+        </Routes>
         </BrowserRouter>
       </ThemeProvider>
     </div>
