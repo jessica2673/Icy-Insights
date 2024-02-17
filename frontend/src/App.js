@@ -1,11 +1,10 @@
-import Search from './components/Search/Search';
-
+import Map from "./components/Map/Map";
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Search/>
+        <Map/>
       </header>
     </div>
   );
