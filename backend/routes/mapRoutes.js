@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Client } = require("googlemaps/google-maps-services-js");
+const { Client } = require("@googlemaps/google-maps-services-js");
 const keys = require('../config/keys');
 
 const client = new Client({});
@@ -28,9 +28,5 @@ router.post('/computeRoute', (req, res) => {
         res.status(500).send('Error computing path')
     }
 });
-
-router.listen(port, () => {
-    console.log('Server is running on http://localhost:5000/map');
-})
 
 module.exports = router;
