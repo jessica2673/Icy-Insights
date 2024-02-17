@@ -25,15 +25,18 @@ const theme = createTheme({
   typography: {
     fontWeightBold: 700, // Example property
    
+  },
+  fonts: ["sans-serif", "Roboto"],
+  fontSizes: {
+    small: "1em",
+    medium: "2em",
+    large: "3em"
   }
   // You can also customize components, typography, etc., here
 });
 
-const App = () => (
-  <ThemeProvider theme={theme}>
-    
-    {/* Your App Components Here */}
-  </ThemeProvider>
+const Theme = ({ children }) => (
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
 );
 
-export default App;
+export default Theme;
