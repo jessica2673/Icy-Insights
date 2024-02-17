@@ -22,6 +22,19 @@ const Search = () => {
         }
       })
 
+      if (await !response.ok) {
+        console.log(response.error);
+      }
+
+      const pathCoords = response.data;
+      console.log(pathCoords);
+      const pathResponse = await axios({
+        method: "GET",
+        url: "/map/temp"
+      });
+
+      console.log(pathResponse);
+
       const response2 = await axios({
         method: "POST",
         url: "/map/computeDefaultRoutes",
@@ -31,11 +44,6 @@ const Search = () => {
         }
       })
 
-      if (await !response.ok) {
-        console.log(response.error);
-      }
-
-      console.log(response.data);
     } catch (e) {
       console.log(e);
     }

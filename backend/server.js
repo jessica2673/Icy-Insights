@@ -34,16 +34,16 @@ async function locationToCoords(location) {
   const api = `${keys.maps.url}${location}&key=${keys.maps.mapsAPI}`;
   let response = await fetch(api);
   if (await !response.ok) {
-      console.log(response.error);
+    console.log(response.error);
   } else {
-      response = await response.json();
+    response = await response.json();
   }
 
   const locationObject = await response.results[0].geometry.location;
   if (!locationObject) {
-      console.log('Cannot obtain location.');
+    console.log('Cannot obtain location.');
   } else {
-      return await locationObject;
+    return await locationObject;
   }
 }
 
