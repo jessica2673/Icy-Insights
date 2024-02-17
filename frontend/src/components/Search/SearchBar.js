@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 const placesLibrary = ["places"];
 
 function SearchBar({ onSearchResult, searchLabel }) {
-  const [searchResult, setSearchResult] = useState("Result: none");
+  const [searchResult, setSearchResult] = useState(null);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
@@ -23,8 +23,6 @@ function SearchBar({ onSearchResult, searchLabel }) {
 
       // Emit the value to the parent component
       onSearchResult(formattedAddress);
-    } else {
-      alert("Please enter text");
     }
   }
 
