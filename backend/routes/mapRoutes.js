@@ -7,6 +7,36 @@ const upload = multer();
 
 const client = new Client({});
 
+async function getPlowedData() {
+    const api = `${keys.snowPlotData.url}`;
+    let geoJsonResponse = await fetch(api); // returns a large amount of data
+    if (await !geoJsonResponse.ok) {
+        console.log(geoJsonResponse.error);
+    } else {
+        geoJsonResponse = await geoJsonResponse.json();
+    }
+
+    const latMin = -79.54;
+    const latMax = -79.20;
+    const lngMin = 43.60;
+    const lngMax = 43.67;
+
+    const isWithinBounds = (coordinates) => { // coordinates is an array, so check if some of those points are within the bounds
+        return coordinates.some(coordinate => {
+            return (coordinate[0] >= latMin && coordinate[0] <= latMax && coordinate[1] >= lngMin && coordinate[1] <= lngMax);
+        });
+    };
+
+    const filteredFeatures = (geoJsonResponse.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
+
+    console.log(filteredFeatures);
+}
+
+router.get('/temp', async (req, res) => {
+    console.log('temp reached');
+    await getPlowedData();
+})
+
 router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
     // computeAlternativeRoutes is always true, start and end are addresses
     const { start, end, computeAlternativeRoutes } = req.body;
