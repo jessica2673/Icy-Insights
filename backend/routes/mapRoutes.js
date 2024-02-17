@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { Client } = require("@googlemaps/google-maps-services-js");
 const keys = require('../config/keys');
+import locationToCoords from '../server';
 
 const client = new Client({});
 
-router.post('/computeRoute', (req, res) => {
-    const { origin, destination } = req.body;
+router.post('/computeDefaultRoutes', (req, res) => {
+    // computeAlternativeRoutes is always true
+    const { origin, destination, computeAlternativeRoutes } = req.body;
     const travelMode = "drive";
 
     if (!origin || !origin.address || !destination.address || !destination) {
@@ -19,6 +21,7 @@ router.post('/computeRoute', (req, res) => {
                 origin: origin.address,
                 destination: destination.address,
                 mode: travelMode,
+                alternatives: computeAlternativeRoutes,
                 key: keys.maps.mapsAPI,
             },
             timeout: 10000,
@@ -27,6 +30,10 @@ router.post('/computeRoute', (req, res) => {
         console.error(error);
         res.status(500).send('Error computing path')
     }
+});
+
+router.post('/plowRoutes', (req, res) => {
+
 });
 
 module.exports = router;
