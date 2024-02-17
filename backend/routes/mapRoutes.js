@@ -7,7 +7,25 @@ const upload = multer();
 
 const client = new Client({});
 
-async function getPlowedData() {
+// Convert location in string format to latitude and longitude
+async function locationToCoords(location) {
+    const api = `${keys.maps.url}${location}&key=${keys.maps.mapsAPI}`;
+    let response = await fetch(api);
+    if (await !response.ok) {
+      console.log(response.error);
+    } else {
+      response = await response.json();
+    }
+  
+    const locationObject = await response.results[0].geometry.location;
+    if (!locationObject) {
+      console.log('Cannot obtain location.');
+    } else {
+      return await locationObject;
+    }
+}
+
+async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
     let geoJsonResponse = await fetch(api); // returns a large amount of data
     if (await !geoJsonResponse.ok) {
@@ -27,30 +45,32 @@ async function getPlowedData() {
         });
     };
 
-    const filteredFeatures = (geoJsonResponse.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
+    const filteredPoints = (geoJsonResponse.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
 
-    console.log(filteredFeatures);
+    return filteredPoints;
 }
 
 router.get('/temp', async (req, res) => {
     console.log('temp reached');
-    await getPlowedData();
+    const bbPoints = await boundingBox(req.query.start, req.query.end);
+    const plowedPaths = await getPlowedData(bbPoints);
+    res.status(200).json(plowedPaths.length);
 })
 
 // box for filtering
 async function boundingBox(start, end) {
-    const oCoords = await locationToCoords(start);
-    const dCoords = await locationToCoords(end);
-    const coords = {
-        start: oCoords,
-        end: dCoords
-    }
+    // const oCoords = await locationToCoords(st    art);
+    // const dCoords = await locationToCoords(end);
+    // const coords = {
+    //     start: oCoords,
+    //     end: dCoords
+    // }
 
     // create bounding box + 1000m, filter
-    maxLat = Math.max(oCoords.lat, dCoords.lat);
-    minLat = Math.min(oCoords.lat, dCoords.lat);
-    maxLng = Math.max(oCoords.lng, dCoords.lng);
-    minLng = Math.ming(oCoords.lng, dCoords.lng);
+    maxLat = Math.max(start.lat, end.lat);
+    minLat = Math.min(start.lat, end.lat);
+    maxLng = Math.max(start.lng, end.lng);
+    minLng = Math.min(start.lng, end.lng);
 
     // latitude + longitude conversion to 1km leeway
     const expandLat = 0.009;
@@ -69,6 +89,7 @@ async function boundingBox(start, end) {
         'lngMin' : minLng, 
         'lngMax' : maxLng
     };
+    console.log(points);
     return points;
 }
 

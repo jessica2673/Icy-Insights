@@ -20,27 +20,19 @@ const Search = () => {
         }
       })
 
-      if (await !response.ok) {
-        console.log(response.error);
-      }
-
       const pathCoords = response.data;
+      console.log("pathCoords");
       console.log(pathCoords);
       const pathResponse = await axios({
         method: "GET",
-        url: "/map/temp"
+        url: "/map/temp",
+        params: {
+          start: pathCoords.start,
+          end: pathCoords.end
+        }
       });
 
-      console.log(pathResponse);
-
-      const response2 = await axios({
-        method: "POST",
-        url: "/map/computeDefaultRoutes",
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
+      console.log(await pathResponse.data); // contains all the 
 
     } catch (e) {
       console.log(e);

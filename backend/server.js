@@ -29,24 +29,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-// Convert location in string format to latitude and longitude
-async function locationToCoords(location) {
-  const api = `${keys.maps.url}${location}&key=${keys.maps.mapsAPI}`;
-  let response = await fetch(api);
-  if (await !response.ok) {
-    console.log(response.error);
-  } else {
-    response = await response.json();
-  }
-
-  const locationObject = await response.results[0].geometry.location;
-  if (!locationObject) {
-    console.log('Cannot obtain location.');
-  } else {
-    return await locationObject;
-  }
-}
-
 app.use('/test', () => {console.log('test works')});
 app.use('/snow', snowRoute);
 // app.use('/user', userRoute);
