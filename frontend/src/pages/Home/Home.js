@@ -5,7 +5,8 @@ const Home = () => {
   
   return (
     <div>
-      <Map/>
+
+        <Map/>
     </div>
   );
 }
