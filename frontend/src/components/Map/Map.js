@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
 
@@ -15,24 +15,31 @@ const mapContainerStyle = {
 
 const Map = () => {
 
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(success, error)
-  } else {
-    console.log("Geolocation not supported");
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+
+    function success(position){
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+      setLocation({ lat, lng }); // Update state as an object
+      console.log(typeof(location));
+    }
   
-  function success(position){
-    const latitude = position.coords.latitude;
-    const longitude = position.coords.longitude;
-    setLocation(latitude, longitude);
-    console.log(location);
-  }
+    function error() {
+      console.log("Unable to retrieve your location");
+    }
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+    
+  }, []); // Empty dependency array means this runs once on component mount
+
   
-  function error() {
-    console.log("Unable to retrieve your location");
-  }
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY
@@ -54,7 +61,7 @@ const Map = () => {
         zoom={15}
         center={location}
       >
-        <MarkerF position={{location}} />
+        <MarkerF position={location} />
       </GoogleMap>
     </div>
   );

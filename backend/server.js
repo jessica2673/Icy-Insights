@@ -31,5 +31,5 @@ app.listen(PORT, () => {
 
 app.use('/test', () => {console.log('test works')});
 app.use('/snow', snowRoute);
-app.use('/user', userRoute);
+// app.use('/user', userRoute);
 app.use('/map', mapRoute);
