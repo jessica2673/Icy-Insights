@@ -29,7 +29,6 @@ function SwipeableEdgeDrawer(props) {
         } else {
             setOpen(!open)
         }
-        console.log("toggled")
     };
 
     // This is used only for the example
@@ -94,9 +93,9 @@ function SwipeableEdgeDrawer(props) {
                     }}
                 >
                     <Search sx={{ pointerEvents: 'auto' }} />
-                    <Typography sx={{ p: 2, color: 'text.secondary' }}> Favourites </Typography>
+                    <Typography sx={{ p: 2, color: 'text.primary' }}> Favourites </Typography>
                     <OutlinedCard/>
-                    <Typography sx={{ p: 2, color: 'text.secondary' }}> History </Typography>
+                    <Typography sx={{ p: 2, color: 'text.primary' }}> History </Typography>
                     <OutlinedCard/>
                 </StyledBox>
             </SwipeableDrawer>
