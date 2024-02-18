@@ -129,7 +129,8 @@ class Map2 extends Component {
         <div style={{ height: 800, width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
-              key: process.env.REACT_APP_MAPS_API_KEY
+              key: process.env.REACT_APP_MAPS_API_KEY,
+              libraries: ['places'],
             }}
             defaultCenter={{ lat: 43.7747712, lng: -79.5017216 }}
             defaultZoom={10} 

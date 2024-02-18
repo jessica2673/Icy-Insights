@@ -4,14 +4,12 @@ import { TextField } from '@mui/material';
 import { Box } from "@mui/material";
 import './SearchBar.css'
 
-const placesLibrary = ["places"];
-
 function SearchBar({ onSearchResult, searchLabel }) {
   const [searchResult, setSearchResult] = useState(null);
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
-    libraries: placesLibrary
+    libraries: ["places"]
   });
 
   function onLoad(autocomplete) {
