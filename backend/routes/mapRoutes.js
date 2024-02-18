@@ -23,7 +23,7 @@ async function getIntersections() {
     foundIntersections.forEach((intersection) => {
         intersectionCoords.push(intersection.coords);
     })
-    // console.log(intersectionCoords);
+
     return intersectionCoords;
 }
 
@@ -47,10 +47,7 @@ async function getGoogleRoutes(start, end) {
 async function getPlowedData(points) {
     const api = `${keys.snowPlotData.url}`;
     let geoJsonResponse = await fetch(api);
-    if (!geoJsonResponse.ok) {
-        console.log(geoJsonResponse.error);
-        return;
-    }
+
     geoJsonResponse = await geoJsonResponse.json();
 
     const isWithinBounds = (coordinate) => {
@@ -102,8 +99,6 @@ router.get('/temp', async (req, res) => {
     let coverage = 0.0;
     decodedRoutes.forEach(async (decodedRoute, index) => {
         coverage = calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, threshold);
-        console.log(coverage);
-        console.log(highestCoverage.percentage);
         if (coverage > highestCoverage.percentage) {
             highestCoverage = { 
                 percentage: coverage, 
@@ -125,7 +120,6 @@ router.get('/temp', async (req, res) => {
         }
     }
 
-    console.log(resultRoutes);
     res.status(200).json(resultRoutes);
 });
 

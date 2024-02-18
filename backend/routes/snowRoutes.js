@@ -41,7 +41,7 @@ router.post("/paths", upload.none(), async (req, res) => { // upload.none here i
         start: startCoords,
         end: endCoords
     }
-    console.log(coords);
+
     const message = "starting location with lat: " + startCoords.lat + ", lng: " + startCoords.lng + ", and destination with lat: " + endCoords.lat + " lng: " + endCoords.lng;
     await res.status(200).json(coords);
 })
