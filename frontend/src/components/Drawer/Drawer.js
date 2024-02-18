@@ -4,10 +4,13 @@ import { styled } from '@mui/material/styles';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card, Typography } from '@mui/material';
 import Search from '../Search/Search'
+import OutlinedCard from './Card.js'
+import CardContent from '@mui/material/CardContent';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import theme from '../../Theme.jsx';
-import OutlinedCard from './Card';
+
+
 
 const drawerBleeding = 56;
 
@@ -105,10 +108,9 @@ function SwipeableEdgeDrawer(props) {
                         >
                             <Search sx={{ pointerEvents: 'auto', width: '80%' }} />
                         </Box>
-                        <Typography sx={{ p: 2, color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> Favourites </Typography>
-                        <OutlinedCard />
-                        <Typography sx={{ p: 2, color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> History </Typography>
-                        <OutlinedCard />
+                        <br/>
+                        
+                        <OutlinedCard/>
                     </StyledBox>
                 </SwipeableDrawer>
             </Root>

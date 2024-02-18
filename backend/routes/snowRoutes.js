@@ -16,7 +16,7 @@ async function locationToCoords(location) {
     } else {
       response = await response.json();
     }
-  
+
     const locationObject = await response.results[0].geometry.location;
     if (!locationObject) {
       console.log('Cannot obtain location.');
