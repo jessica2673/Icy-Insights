@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme';
+import { useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -29,6 +30,8 @@ function Copyright(props) {
 
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,6 +39,7 @@ export default function SignUp() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    navigate('/home');
   };
 
   return (
@@ -117,7 +121,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="./Sign-In" variant="body2">
+                <Link href="./sign-in" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
