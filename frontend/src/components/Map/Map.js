@@ -7,10 +7,10 @@ import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 //const libraries = ['routes'];
 const mapContainerStyle = {
   position: "absolute",
-  top: "0px",
-  left: "0px",
-  right: "0px",
-  bottom: "56px", 
+  top: "15px",
+  left: "15px",
+  right: "15px",
+  bottom: "71px", 
 };
 
 
