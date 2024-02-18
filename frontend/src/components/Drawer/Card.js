@@ -46,15 +46,25 @@ const cardFave = (
   </React.Fragment>
 );
 
-
-
 const cardHist = (
   <React.Fragment>
     <CardContent>
     <Typography sx={{color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> History </Typography>
-      <Icon>
-        <HomeIcon></HomeIcon>
-      </Icon>
+      <Box>
+        <Typography>Toronto Public Library - York Woods Branch</Typography>
+        <Typography>Address: 1785 Finch Ave W, Toronto, ON M3N 1M6</Typography>
+        <hr/>
+      </Box>
+      <Box>
+        <Typography>York University</Typography>
+        <Typography>Address: 4700 Keele St, Toronto, ON M3J 1P3</Typography>
+        <hr/>
+      </Box>
+      <Box>
+        <Typography>Toronto Public Library - York Woods Branch</Typography>
+        <Typography>Address: 1785 Finch Ave W, Toronto, ON M3N 1M6</Typography>
+        <hr/>
+      </Box>
     </CardContent>
   </React.Fragment>
 );
