@@ -1,8 +1,7 @@
 import React from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
-import { grey } from '@mui/material/colors';
-import { CenterFocusStrong, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card, Typography } from '@mui/material';
 import Search from '../Search/Search'
 
@@ -14,13 +13,10 @@ const drawerBleeding = 56;
 
 const Root = styled('div')(({ theme }) => ({
     height: '100%',
-    backgroundColor: theme.palette.primary.main
-        //theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
 }));
 
 const StyledBox = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.default
-    //backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
 }));
 
 function SwipeableEdgeDrawer(props) {
@@ -103,8 +99,8 @@ function SwipeableEdgeDrawer(props) {
                         <Box
                             sx={{
                                 display: 'flex',
-                                justifyContent: 'center', // Centers horizontally
-                                width: '100%', // Ensure it takes the full width
+                                justifyContent: 'center', 
+                                width: '100%', 
                             }}
                         >
                             <Search sx={{ pointerEvents: 'auto', width: '80%' }} />
