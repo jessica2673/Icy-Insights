@@ -63,37 +63,45 @@ router.get('/temp', async (req, res) => {
     const bbPoints = await boundingBox(start, end);
     const plowedPaths = await getPlowedData(bbPoints);
     const routes = await getGoogleRoutes(start, end);
+    
+    // Assuming each route includes total distance in meters provided by Google Maps API
     const decodedRoutes = routes.map(route => {
         const encodedPath = route.overview_polyline.points;
         const decodedPath = polyline.decode(encodedPath);
-        return decodedPath;
+        // Convert distance from meters to kilometers
+        const totalDistanceKm = route.legs.reduce((total, leg) => total + leg.distance.value / 1000, 0);
+        return {
+            path: decodedPath,
+            totalDistanceKm
+        };
     });
 
-    const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes);
+    const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes.map(r => r.path));
     console.log(geoJsonRoutes);
 
-    const coverage = calculateCoverage(geoJsonRoutes, plowedPaths);
+    decodedRoutes.forEach((decodedRoute, index) => {
+        const singleGeoJsonRoute = geoJsonRoutes[index]; // Assumes convertRoutesToGeoJSON maintains order
+        console.log(decodedRoute.totalDistanceKm);
+        calculateCoverage(singleGeoJsonRoute, plowedPaths, decodedRoute.totalDistanceKm);
+    });
 
     res.status(200).json(plowedPaths.length);
-})
+});
 
-function calculateCoverage(geoJsonRoutes, filteredFeatures) {
-    geoJsonRoutes.forEach(route => {
-        let totalCoverage = 0;
-        let totalPath = turf.length(route, {units: 'kilometers'});
-    
-        filteredFeatures.forEach(feature => {
-            const intersection = turf.lineIntersect(route, feature);
-            if (intersection.features.length > 0) {
+function calculateCoverage(route, filteredFeatures, totalPathKm) {
+    let totalCoverage = 0;
+
+    filteredFeatures.forEach(feature => {
+        const intersection = turf.lineIntersect(route, feature);
+        if (intersection.features.length > 0) {
             intersection.features.forEach(segment => {
                 totalCoverage += turf.length(segment, {units: 'kilometers'});
             });
-            }
-        });
-    
-    console.log(`Total coverage: ${totalCoverage}, Total path length: ${totalPath}`);
-    console.log(`Total coverage for route: ${totalCoverage / totalPath * 100} %`);
+        }
     });
+
+    console.log(`Total coverage: ${totalCoverage} km, Total path length: ${totalPathKm} km`);
+    console.log(`Total coverage for route: ${(totalCoverage / totalPathKm * 100).toFixed(2)} %`);
 }
 
 function convertRoutesToGeoJSON(decodedRoutes) {
