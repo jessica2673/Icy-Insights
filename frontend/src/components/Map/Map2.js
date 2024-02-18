@@ -46,7 +46,7 @@ class Map2 extends Component {
     };
     return (
       <div>
-        <div style={{ height: "400px", width: "100%" }}>
+        <div style={{ height: "700px", width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAPS_API_KEY
@@ -57,6 +57,8 @@ class Map2 extends Component {
             yesIWantToUseGoogleMapApiInternals
             onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps)}
             options={mapContainerStyle}
+            
+
           />
         </div>
       </div>

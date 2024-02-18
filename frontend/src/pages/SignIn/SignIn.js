@@ -14,12 +14,19 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from '@mui/material';
 
 export default function SignIn() {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
     navigate('/home');
+  };
+
+  const handleBack = () => {
+    // Navigate back 
+    navigate(-1); // This will navigate back in the history stack
   };
 
   const handleSubmit = (event) => {
@@ -35,6 +42,7 @@ export default function SignIn() {
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+        
         <Box
           sx={{
             marginTop: 8,
@@ -43,8 +51,12 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
+         <IconButton onClick={handleBack} sx={{ alignSelf: 'flex-start', zIndex: 1000 }}>
+            <ArrowBackIcon sx={{ color: 'secondary.main' }}/>
+          </IconButton> 
+
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon sx={{color: 'template.palette.secondary.main'}}/>
+            <LockOutlinedIcon sx={{color: 'theme.palette.secondary.main'}}/>
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in

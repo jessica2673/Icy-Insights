@@ -14,6 +14,8 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme';
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { IconButton } from '@mui/material';
 
 
 export default function SignUp() {
@@ -29,6 +31,11 @@ export default function SignUp() {
     navigate('/home');
   };
 
+  const handleBack = () => {
+    // Navigate back 
+    navigate(-1); // This will navigate back in the history stack
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -41,6 +48,9 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
+          <IconButton onClick={handleBack} sx={{ alignSelf: 'flex-start', zIndex: 1000 }}>
+            <ArrowBackIcon sx={{ color: 'secondary.main' }}/>
+          </IconButton> 
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon sx={{color: 'template.palette.secondary.main'}}/>
           </Avatar>

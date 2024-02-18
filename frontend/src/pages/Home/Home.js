@@ -18,7 +18,7 @@ const Home = () => {
     <ThemeProvider theme={theme}>
       <IconButton
         sx={{
-          position: 'absolute',
+          position: 'relative',
           pointerEvents: 'auto',
           top: 0,
           right: 0,
@@ -26,6 +26,7 @@ const Home = () => {
           zIndex: 500,
           width: '40px',
           height: '40px',
+          float: 'left',
           borderRadius: '50%', 
           backgroundColor: 'white', 
         }}
