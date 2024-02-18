@@ -6,7 +6,7 @@ import theme from '../../Theme.jsx';
 import axios from 'axios'
 import { Box } from '@mui/material';
 
-const Search = () => {
+const Search = ({ onPathData }) => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
   const [history, setHistory] = useState([]);
@@ -44,7 +44,7 @@ const Search = () => {
       });
 
       console.log('routes are here: ');
-      console.log(await pathResponse.data); // contains all the routes
+      onPathData(await pathResponse.data); // contains all the routes
 
     } catch (e) {
       console.log(e);

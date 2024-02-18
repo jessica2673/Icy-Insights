@@ -13,7 +13,12 @@ const Home = () => {
   const toSignIn = () => {
     navigate('/sign-in');
   };
-  
+
+  const handlePathData = (data) => {
+    // Your implementation for handlePathData
+    console.log(data);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <IconButton
@@ -27,15 +32,15 @@ const Home = () => {
           width: '40px',
           height: '40px',
           float: 'left',
-          borderRadius: '50%', 
-          backgroundColor: 'white', 
+          borderRadius: '50%',
+          backgroundColor: 'white',
         }}
         onClick={toSignIn}
       >
-        <AccountCircle fontSize="large" sx={{color: 'secondary.main'}} />
+        <AccountCircle fontSize="large" sx={{ color: 'secondary.main' }} />
       </IconButton>
-      <Map2 />
-      <Drawer />
+      <Map2 onPathData={handlePathData}/>
+      <Drawer onPathData={handlePathData} />
     </ThemeProvider>
   );
 }

@@ -106,7 +106,7 @@ function SwipeableEdgeDrawer(props) {
                                 width: '100%', 
                             }}
                         >
-                            <Search sx={{ pointerEvents: 'auto', width: '80%' }} />
+                            <Search onPathData={props.onPathData} sx={{ pointerEvents: 'auto', width: '80%' }} />
                         </Box>
                         <br/>
                         

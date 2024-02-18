@@ -15,10 +15,16 @@ const mapContainerStyle = {
 class Map2 extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       currentLocation: { lat: 43.7747712, lng: -79.5017216 }
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.onPathData !== prevProps.onPathData) {
+      this.updateMapPath();
+    }
   }
 
   componentDidMount() {
