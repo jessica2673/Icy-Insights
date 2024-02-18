@@ -99,27 +99,52 @@ router.get('/temp', async (req, res) => {
 
     decodedRoutes.forEach((decodedRoute, index) => {
         const singleGeoJsonRoute = geoJsonRoutes[index]; // Assumes convertRoutesToGeoJSON maintains order
-        console.log(decodedRoute.totalDistanceKm);
-        calculateCoverage(singleGeoJsonRoute, plowedPaths, decodedRoute.totalDistanceKm);
+        calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, 50);
     });
 
     res.status(200).json(plowedPaths.length);
 });
 
-function calculateCoverage(route, filteredFeatures, totalPathKm) {
-    let totalCoverage = 0;
+// distance between points on globe
+function haversine(lng1, lat1, lng2, lat2) {
+    const R = 6371; // earth radius
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lng2 - lng1) * Math.PI / 180; 
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+              Math.sin(dLon/2) * Math.sin(dLon/2); 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    return R * c;
+}
 
-    filteredFeatures.forEach(feature => {
-        const intersection = turf.lineIntersect(route, feature);
-        if (intersection.features.length > 0) {
-            intersection.features.forEach(segment => {
-                totalCoverage += turf.length(segment, {units: 'kilometers'});
-            });
+// JESSICA
+function minDistanceToPlowPath(point, plowedPaths) {
+    let min = Infinity;
+    console.log("GEOMETRY");
+    console.log(plowedPaths.geometry);
+    plowedPaths.geometry.coordinates.forEach(coordinate => {
+        const distance = haversine(coordinate[1], coordinate[0], point[1], point[0]);
+        min = Math.min(min, distance);
+    });
+    return min;
+}
+
+const threshold = 50;
+
+async function calculateCoverage(route, plowedPaths, totalPathKm, threshold) {
+    let coveredPoints = 0;
+    let totalPoints = 0;
+
+    route.path.forEach(point => {
+        totalPoints++;
+        const distance = minDistanceToPlowPath(point, plowedPaths);
+        if (distance <= threshold) {
+            coveredPoints++; 
         }
     });
 
-    console.log(`Total coverage: ${totalCoverage} km, Total path length: ${totalPathKm} km`);
-    console.log(`Total coverage for route: ${(totalCoverage / totalPathKm * 100).toFixed(2)} %`);
+    const coveragePercentage = (coveredPoints / totalPoints) * 100;
+    console.log(`Coverage percentage: ${coveragePercentage.toFixed(2)}%`);
 }
 
 function convertRoutesToGeoJSON(decodedRoutes) {
