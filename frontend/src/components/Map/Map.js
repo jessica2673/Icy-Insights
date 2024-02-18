@@ -62,6 +62,7 @@ const Map = () => {
           mapContainerStyle={mapContainerStyle}
           zoom={15}
           center={location}
+          options={{fullscreenControl: false}}
         >
           <MarkerF position={location} icon={"https://maps.google.com/mapfiles/ms/icons/blue-dot.png"}/>
         </GoogleMap>
