@@ -10,7 +10,7 @@ const mapContainerStyle = {
   top: "0px",
   left: "0px",
   right: "0px",
-  bottom: "0px", 
+  bottom: "56px", 
 };
 
 
