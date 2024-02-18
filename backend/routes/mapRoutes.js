@@ -130,7 +130,7 @@ router.get('/temp', async (req, res) => {
     }
 
     console.log(resultRoutes);
-    res.status(200).json(resultRoutes);
+    res.status(200).json({resultRoutes, riskList});
 });
 
 // distance between points on globe
