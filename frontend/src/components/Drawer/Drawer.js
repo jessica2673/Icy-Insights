@@ -3,7 +3,7 @@ import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card } from '@mui/material';
+import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card, Typography } from '@mui/material';
 import Search from '../Search/Search'
 
 const drawerBleeding = 56;
@@ -45,9 +45,6 @@ function SwipeableEdgeDrawer(props) {
                     },
                 }}
             />
-            <Box sx={{ textAlign: 'center', pt: 1 }}>
-                <Button onClick={toggleDrawer(true)}>Open</Button>
-            </Box>
             <SwipeableDrawer
                 container={container}
                 anchor="bottom"
@@ -69,13 +66,24 @@ function SwipeableEdgeDrawer(props) {
                         visibility: 'visible',
                         right: 0,
                         left: 0,
+                        width: '100%',
                     }}
                 >
-                    <IconButton sx={{ left: 'calc(50% - 15px)', position: 'absolute', pointerEvents: 'auto' }} onClick={toggleDrawer()}>
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            pointerEvents: 'auto',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                        }}
+                        onClick={toggleDrawer()}
+                    >
                         {open ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>
-                    <Search sx={{ pointerEvents: 'auto' }}/>
+                    <Typography sx={{ p: 2, color: 'text.secondary' }}>‎ </Typography>
                 </StyledBox>
+
                 <StyledBox
                     sx={{
                         px: 2,
@@ -84,6 +92,9 @@ function SwipeableEdgeDrawer(props) {
                         overflow: 'auto',
                     }}
                 >
+                    <Search sx={{ pointerEvents: 'auto' }} />
+                    <Search sx={{ pointerEvents: 'auto' }} />
+
                     <Card sx={{ left: '50%', position: 'absolute' }}>womp womp</Card>
                 </StyledBox>
             </SwipeableDrawer>
