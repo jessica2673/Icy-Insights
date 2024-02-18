@@ -42,7 +42,7 @@ function SearchBar({ onSearchResult, searchLabel }) {
         <TextField
           label={searchLabel} // Use the received label prop
           variant="outlined"
-          sx={{margin: 0.5, width: '100%'}}
+          sx={{margin: 0.75, width: '300px'}}
         />
       </Autocomplete>
     </Box>

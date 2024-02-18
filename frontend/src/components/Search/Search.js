@@ -76,13 +76,11 @@ const Search = () => {
           <SearchBar
             onSearchResult={(e) => setStartLocation(e)}
             searchLabel="Starting Location"
-            sx={{ my: 2, width: '100%' }} // Apply vertical margins and set width
           />
           
           <SearchBar
             onSearchResult={(e) => setDestination(e)}
             searchLabel="Destination"
-            sx={{ my: 2, width: '75%' }} // Apply vertical margins and set width
           />
           
           <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }}>
