@@ -2,9 +2,6 @@ import React from 'react';
 import { useState, useEffect } from 'react'; 
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
-
-
-const libraries = ['places'];
 const mapContainerStyle = {
   position: "absolute",
   top: "15px",
