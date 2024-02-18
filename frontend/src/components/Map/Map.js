@@ -4,13 +4,15 @@ import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
 
 
-//const libraries = ['routes'];
 const mapContainerStyle = {
   position: "absolute",
   top: "15px",
   left: "15px",
   right: "15px",
-  bottom: "71px", 
+  bottom: "56px",
+  boxShadow: "1px 1px 10px 1px grey",
+  borderTopLeftRadius: "10px",
+  borderTopRightRadius: "10px",
 };
 
 
