@@ -4,6 +4,8 @@ const { Client } = require("@googlemaps/google-maps-services-js");
 const keys = require('../config/keys');
 const multer = require('multer');
 const upload = multer();
+const polyline = require('@mapbox/polyline');
+const turf = require('@turf/turf');
 
 const client = new Client({});
 
@@ -19,7 +21,7 @@ async function getGoogleRoutes(start, end) {
             timeout: 10000
         })
 
-        console.log(response.data.routes);
+        // console.log(response.data.routes);
 
         return response.data.routes;
     } catch (e) {
@@ -66,8 +68,25 @@ router.get('/temp', async (req, res) => {
     const bbPoints = await boundingBox(start, end);
     const plowedPaths = await getPlowedData(bbPoints);
     const routes = await getGoogleRoutes(start, end);
+    const decodedRoutes = routes.map(route => {
+        const encodedPath = route.overview_polyline.points;
+        const decodedPath = polyline.decode(encodedPath);
+        return decodedPath;
+    });
+    console.log(decodedRoutes); 
+
+    const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes);
+    console.log(geoJsonRoutes);
+
     res.status(200).json(plowedPaths.length);
 })
+
+function convertRoutesToGeoJSON(decodedRoutes) {
+  return decodedRoutes.map(route => {
+    const coordinates = route.map(point => [point.lng, point.lat]);
+    return turf.lineString(coordinates);
+  });
+}
 
 // box for filtering
 async function boundingBox(start, end) {
