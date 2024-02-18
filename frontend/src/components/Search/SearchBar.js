@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 import { TextField } from '@mui/material';
 import { Box } from "@mui/material";
+import './SearchBar.css'
 
 const placesLibrary = ["places"];
 
@@ -38,7 +39,7 @@ function SearchBar({ onSearchResult, searchLabel }) {
         alignItems: 'center', // Center items horizontally in the container
         width: '100%', // Container takes full width
       }}>
-      <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+      <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad} sx={{zIndex: 300000}}>
         <TextField
           label={searchLabel} // Use the received label prop
           variant="outlined"
