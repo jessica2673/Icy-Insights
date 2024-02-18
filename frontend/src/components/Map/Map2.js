@@ -11,15 +11,15 @@ const mapContainerStyle = {
   borderTopLeftRadius: "10px",
   borderTopRightRadius: "10px",
 };
-
+ 
 class Map2 extends Component {
   constructor(props) {
     super(props);
-    this.myRoutes = this.props.routesData ? this.props.routesData.routesData.resultRoutes ?? [0]
-    : this.DEFAULT_COORDS 
-     
+    this.myRoutes = this.props.routesData ? this.props.routesData.resultRoutes[0].route.path : this.DEFAULT_COORDS 
+    this.forceUpdate()
     this.state = {
       currentLocation: { lat: 43.7747712, lng: -79.5017216 },
+      rerender: 0
     };
   }
 
@@ -30,32 +30,39 @@ class Map2 extends Component {
       this.updateMapWithNewPath();
     }
   }
+
   DEFAULT_COORDS = [
-    [-79.143500761, 43.7959346370001],
-    [-79.1432121559999, 43.796028113],
-    [-79.142620468, 43.7961649710001],
-    [-79.142497362, 43.7962059010001],
-    [-79.1423872569999, 43.7962463050001],
-    [-79.142229214, 43.79632151],
-    [-79.142160695, 43.796358551],
-    [-79.142075193, 43.7964138200001],
-    [-79.14190397, 43.7965316130001],
-    [-79.141804398, 43.7966080630001],
-    [-79.141730363, 43.79668235],
-    [-79.141652994, 43.796751057],
-    [-79.141574572, 43.7968399040001],
-    [-79.1415077879999, 43.7969233690001],
-    [-79.141417302, 43.797032583],
-    [-79.141313801, 43.797142325],
-    [-79.1412368219999, 43.7972328870001],
-    [-79.141142107, 43.7973320780001],
+    [43.65324, -79.38274],
+    [43.65266, -79.38252],
+    [43.65244, -79.38247],
+    [43.65217, -79.38236],
+    [43.6521, -79.3823],
+    [43.65206, -79.38225],
+    [43.65201, -79.38215],
+    [43.65194, -79.38191],
+    [43.65186, -79.38164],
+    [43.65181, -79.38157],
+    [43.65178, -79.38154],
+    [43.65064, -79.38109],
+    [43.64972, -79.3807],
+    [43.64956, -79.38063],
+    [43.64972, -79.3807],
+    [43.64989, -79.38077],
+    [43.65008, -79.37992],
+    [43.65015, -79.37961]
   ];
+
+  flipAndFormatCoordinates = (coords) => {
+    // Flip each coordinate from [longitude, latitude] to [latitude, longitude]
+    const flippedCoords = coords.map(([lng, lat]) => [lat, lng]);
+    return flippedCoords;
+}
 
   updateMapWithNewPath(onPathData) {
     const apiIsLoaded = (map, maps) => {
       // Clear existing paths
       map.data.forEach((feature) => {
-        map.data.remove(feature);
+        map.data.remove(feature); 
       });
 
       // Assuming onPathData is a GeoJSON object for simplicity
@@ -84,7 +91,7 @@ class Map2 extends Component {
           this.setState({
             currentLocation: {
               lat: position.coords.latitude,
-              lng: position.coords.longitude,
+              lng: position.coords.longitude, 
             },
           });
         },
@@ -106,11 +113,11 @@ class Map2 extends Component {
             type: "Feature",
             geometry: {
               type: "LineString",
-              coordinates: this.myRoutes,
+              coordinates: this.flipAndFormatCoordinates(this.myRoutes),
             },
             properties: {
-              stroke: "#ff0000",
-              "stroke-width": 2,
+              stroke: "#0047AB",
+              "stroke-width": 4,
             },
           },
         ],
@@ -144,7 +151,7 @@ class Map2 extends Component {
             onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps)}
             options={mapContainerStyle}
           />
-        </div>
+        </div> 
       </div>
     );
   }
