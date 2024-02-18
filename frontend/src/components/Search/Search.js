@@ -65,12 +65,25 @@ const Search = () => {
         return;
       }
     } else {
-      setHistory([destination]);
-      localStorage.setItem('searchHistory', JSON.stringify([destination]));
+      formData.append("start", startLocation);
+      setHistory([{
+        startLocation: startLocation,
+        destination: destination
+      }]);
+      localStorage.setItem('searchHistory', JSON.stringify([{
+        startLocation: startLocation,
+        destination: destination
+      }]));
     }
     
-    setHistory([...history, destination]);
-    localStorage.setItem('searchHistory', JSON.stringify([...history, destination]));
+    setHistory([...history, {
+      startLocation: startLocation,
+      destination: destination
+    }]);
+    localStorage.setItem('searchHistory', JSON.stringify([...history, {
+                                                            startLocation: startLocation,
+                                                            destination: destination
+                                                          }]));
     await sendData(formData);
   }
 
