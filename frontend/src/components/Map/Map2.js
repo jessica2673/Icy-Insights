@@ -17,7 +17,7 @@ class Map2 extends Component {
     super(props);
 
     this.state = {
-      currentLocation: { lat: 40.756795, lng: -73.954298 }
+      currentLocation: { lat: 43.7747712, lng: -79.5017216 }
     };
   }
 
@@ -131,7 +131,7 @@ class Map2 extends Component {
             bootstrapURLKeys={{
               key: process.env.REACT_APP_MAPS_API_KEY
             }}
-            defaultCenter={{ lat: 40.756795, lng: -73.954298 }}
+            defaultCenter={{ lat: 43.7747712, lng: -79.5017216 }}
             defaultZoom={10} 
             center={this.state.currentLocation}
             yesIWantToUseGoogleMapApiInternals
