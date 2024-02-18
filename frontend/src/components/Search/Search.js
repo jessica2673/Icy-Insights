@@ -14,7 +14,6 @@ const Search = () => {
   useEffect(() => {
     const searchHistory = localStorage.getItem("searchHistory"); // searchHistory is an array of strings
     if (searchHistory) {
-      console.log(typeof(searchHistory[0]));
       const storedHistory = JSON.parse(searchHistory);
       setHistory(storedHistory);
     }
@@ -44,7 +43,8 @@ const Search = () => {
         }
       });
 
-      console.log(await pathResponse.data); // contains all the 
+      console.log('routes are here: ');
+      console.log(await pathResponse.data); // contains all the routes
 
     } catch (e) {
       console.log(e);

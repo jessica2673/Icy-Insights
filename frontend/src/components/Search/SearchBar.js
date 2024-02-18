@@ -9,7 +9,7 @@ function SearchBar({ onSearchResult, searchLabel }) {
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
-    libraries: ["places"]
+    libraries: ['places'],
   });
 
   function onLoad(autocomplete) {

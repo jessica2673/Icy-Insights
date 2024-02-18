@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState, useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -48,35 +49,45 @@ const cardFave = (
   </React.Fragment>
 );
 
-const cardHist = (
-  <React.Fragment>
-    <CardContent>
-    <Typography sx={{color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> History </Typography>
-      <Box>
-        <Typography>Toronto Public Library - York Woods Branch</Typography>
-        <Typography>Address: 1785 Finch Ave W, Toronto, ON M3N 1M6</Typography>
-        <hr/>
-      </Box>
-      <Box>
-        <Typography>York University</Typography>
-        <Typography>Address: 4700 Keele St, Toronto, ON M3J 1P3</Typography>
-        <hr/>
-      </Box>
-      <Box>
-        <Typography>Toronto Public Library - York Woods Branch</Typography>
-        <Typography>Address: 1785 Finch Ave W, Toronto, ON M3N 1M6</Typography>
-        <hr/>
-      </Box>
-    </CardContent>
-  </React.Fragment>
-);
+const CardHist = ({ history }) => {
+  return (
+    <React.Fragment>
+      <CardContent>
+      <Typography sx={{color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> Search History </Typography>
+        {history.length > 0 ? (
+          history.map((site, index) => (
+            <Box key={index}>
+              <Typography>{site}</Typography>
+              <hr />
+            </Box>
+          ))
+        ) : (
+          <Typography>No history found</Typography>
+        )}
+      </CardContent>
+    </React.Fragment>
+  );
+};
 
 export default function OutlinedCard() {
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const searchHistory = localStorage.getItem("searchHistory"); // searchHistory is an array of strings
+    if (searchHistory) {
+      const storedHistory = JSON.parse(searchHistory);
+      setHistory(storedHistory); // is an array
+      console.log(storedHistory);
+    }
+  }, []);
+
   return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">{cardFave}</Card>
       <br/>
-      <Card variant="outlined">{cardHist}</Card>
+      <Card variant="outlined">
+        <CardHist history={history} />
+      </Card>
     </Box>
   );
 }
