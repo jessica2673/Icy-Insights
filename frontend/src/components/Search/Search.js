@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import SearchBar from './SearchBar'
 import { ThemeProvider } from '@mui/material/styles';
@@ -9,6 +9,16 @@ import { Box } from '@mui/material';
 const Search = () => {
   const [startLocation, setStartLocation] = useState('');
   const [destination, setDestination] = useState('');
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    const searchHistory = localStorage.getItem("searchHistory"); // searchHistory is an array of strings
+    if (searchHistory) {
+      console.log(typeof(searchHistory[0]));
+      const storedHistory = JSON.parse(searchHistory);
+      setHistory(storedHistory);
+    }
+  }, []);
 
   const sendData = async (formData) => {
     formData.forEach((value, key) => { console.log(`${key}: ${value}`); });
@@ -48,6 +58,19 @@ const Search = () => {
     formData.append("start", startLocation);
     formData.append("end", destination);
 
+    console.log(typeof(history));
+    if (history.length > 0) {
+      if (history.includes(destination)) {
+        await sendData(formData);
+        return;
+      }
+    } else {
+      setHistory([destination]);
+      localStorage.setItem('searchHistory', JSON.stringify([destination]));
+    }
+    
+    setHistory([...history, destination]);
+    localStorage.setItem('searchHistory', JSON.stringify([...history, destination]));
     await sendData(formData);
   }
 
