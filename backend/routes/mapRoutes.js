@@ -6,8 +6,8 @@ const multer = require('multer');
 const upload = multer();
 const polyline = require('@mapbox/polyline');
 const turf = require('@turf/turf');
-const mongoose = require('mongoose');
 const Intersection = require('../models/intersectionModel');
+const { route } = require('./snowRoutes');
 
 const client = new Client({});
 
@@ -100,10 +100,15 @@ router.get('/temp', async (req, res) => {
         routeIndex: 0
     }
     let coverage = 0.0;
+    const riskList = [];
+    const intersectionCoords = await getIntersections();
+
     decodedRoutes.forEach(async (decodedRoute, index) => {
         coverage = calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, threshold);
-        console.log(coverage);
-        console.log(highestCoverage.percentage);
+        const risk = calculateRisk(intersectionCoords, decodedRoute.path);
+        riskList.push(risk);
+
+        // console.log(highestCoverage.percentage);
         if (coverage > highestCoverage.percentage) {
             highestCoverage = { 
                 percentage: coverage, 
@@ -111,6 +116,8 @@ router.get('/temp', async (req, res) => {
             };
         }
     });
+
+    console.log(riskList);
 
     const bestRoute = {
         coverage: highestCoverage.percentage,
@@ -125,7 +132,7 @@ router.get('/temp', async (req, res) => {
         }
     }
 
-    console.log(resultRoutes);
+    // console.log(resultRoutes);
     res.status(200).json(resultRoutes);
 });
 
@@ -139,6 +146,20 @@ function haversine(lng1, lat1, lng2, lat2) {
               Math.sin(dLon/2) * Math.sin(dLon/2); 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     return R * c;
+}
+
+function calculateRisk(intersectionCoords, route) {
+    let riskFound = false;
+    intersectionCoords.forEach(intersection => {
+        route.forEach(point => {
+            const distance = haversine(intersection[0], intersection[1], point[0], point[1]);
+            if (distance <= 5) {
+                riskFound = true;
+            }
+        });
+    });
+    console.log(`Is there risk?: ${riskFound}`);
+    return riskFound;
 }
 
 function minDistanceToPlowPath(point, plowedPaths) {
