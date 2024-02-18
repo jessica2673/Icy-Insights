@@ -4,7 +4,7 @@ import SearchBar from './SearchBar'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme.jsx';
 import axios from 'axios'
-
+import Map from '../Map/Map.js';
 
 const Search = () => {
   const [startLocation, setStartLocation] = useState('');
@@ -50,10 +50,6 @@ const Search = () => {
 
     await sendData(formData);
   }
-
-  const handleSearchResult = (result) => {
-    setStartLocation(result["Formatted "])
-  };
 
   return (
     <ThemeProvider theme={theme}>
