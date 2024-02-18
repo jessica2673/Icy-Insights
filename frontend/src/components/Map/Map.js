@@ -44,7 +44,7 @@ const Map = () => {
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
-    libraries,
+    libraries: ['places']
   });
 
   if (loadError) {

@@ -4,42 +4,91 @@ const { Client } = require("@googlemaps/google-maps-services-js");
 const keys = require('../config/keys');
 const multer = require('multer');
 const upload = multer();
+const polyline = require('@mapbox/polyline');
+const turf = require('@turf/turf');
 
 const client = new Client({});
 
-async function getPlowedData(points) {
-    const api = `${keys.snowPlotData.url}`;
-    let geoJsonResponse = await fetch(api); // returns a large amount of data
-    const geoJson = await geoJsonResponse.json();
+async function getGoogleRoutes(start, end) {
+    try {
+        const response = await client.directions({
+            params: {
+                origin: start,
+                destination: end,
+                alternatives: true,
+                key: keys.maps.mapsAPI
+            },
+            timeout: 10000
+        })
 
-    const latMin = points.latMin - 0.2;
-    const latMax = points.latMax + 0.2;
-    const lngMin = points.lngMin - 0.2;
-    const lngMax = points.lngMax + 0.2;
+        // console.log(response.data.routes);
 
-    const isWithinBounds = (coordinates) => { // coordinates is an array, so check if some of those points are within the bounds
-        return coordinates.some(coordinate => {
-            return (coordinate[0] >= latMin && coordinate[0] <= latMax && coordinate[1] >= lngMin && coordinate[1] <= lngMax);
-        });
-    };
-
-    const filteredPoints = (geoJson.features).filter((feature) => isWithinBounds(feature.geometry.coordinates));
-
-    return filteredPoints;
+        return response.data.routes;
+    } catch (e) {
+        console.log('Error: ' + e);
+    }
 }
 
+async function getPlowedData(points) {
+    const api = `${keys.snowPlotData.url}`;
+    let geoJsonResponse = await fetch(api);
+    if (!geoJsonResponse.ok) {
+        console.log(geoJsonResponse.error);
+        return;
+    }
+    geoJsonResponse = await geoJsonResponse.json();
+
+    const isWithinBounds = (coordinate) => {
+        return (
+            coordinate[0] >= points.lngMin && coordinate[0] <= points.lngMax &&
+            coordinate[1] >= points.latMin && coordinate[1] <= points.latMax
+        );
+    };
+
+    const filteredFeatures = geoJsonResponse.features.filter(feature => {
+        // always linestring for To data
+        if (feature.geometry.type === "LineString") {
+            return feature.geometry.coordinates.some(coords => {
+                if (feature.geometry.type === "Polygon") {
+                    return coords.some(ring => ring.some(isWithinBounds));
+                }
+                return isWithinBounds(coords);
+            });
+        }
+        return false;
+    });
+
+    return filteredFeatures;
+}
+
+
 router.get('/temp', async (req, res) => {
+    const {start, end} = req.query;
     console.log('temp reached');
-    const bbPoints = await boundingBox(req.query.start, req.query.end);
+    const bbPoints = await boundingBox(start, end);
     const plowedPaths = await getPlowedData(bbPoints);
-    console.log(plowedPaths);
+    const routes = await getGoogleRoutes(start, end);
+    const decodedRoutes = routes.map(route => {
+        const encodedPath = route.overview_polyline.points;
+        const decodedPath = polyline.decode(encodedPath);
+        return decodedPath;
+    });
+
+    const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes);
+    console.log(geoJsonRoutes);
+
     res.status(200).json(plowedPaths.length);
 })
 
+function convertRoutesToGeoJSON(decodedRoutes) {
+  return decodedRoutes.map(route => {
+    const coordinates = route.map(point => [point.lng, point.lat]);
+    return turf.lineString(coordinates);
+  });
+}
+
 // box for filtering
 async function boundingBox(start, end) {
-
-    // create bounding box + 1000m, filter
     maxLat = Math.max(start.lat, end.lat);
     minLat = Math.min(start.lat, end.lat);
     maxLng = Math.max(start.lng, end.lng);
@@ -62,40 +111,8 @@ async function boundingBox(start, end) {
         'lngMin' : minLng, 
         'lngMax' : maxLng
     };
-    console.log(points);
+
     return points;
 }
-
-router.post("/plowRoutes", upload.none(), async (req, res) => { 
-    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)
-    console.log(coords); 
-    
-});
-
-router.post('/computeDefaultRoutes', upload.none(), (req, res) => {
-    // computeAlternativeRoutes is always true, start and end are addresses
-    const { start, end, computeAlternativeRoutes } = req.body;
-    const travelMode = "drive";
-
-    if (!start || !end) {
-        res.status(400).status("Missing required location inputs!");
-    }
-
-    try {
-        const response = client.directions({
-            params: {
-                start: start,
-                end: end,
-                mode: travelMode,
-                alternatives: computeAlternativeRoutes,
-                key: keys.maps.mapsAPI,
-            },
-            timeout: 10000,
-        })
-    } catch {
-        console.error(error);
-        res.status(500).send('Error computing path')
-    }
-});
 
 module.exports = router;

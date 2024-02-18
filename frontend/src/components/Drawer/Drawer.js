@@ -2,12 +2,13 @@ import React from 'react';
 import { Global } from '@emotion/react';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { CssBaseline, IconButton, Button, Box, Skeleton, SwipeableDrawer, Card } from '@mui/material';
+import { CenterFocusStrong, ExpandLess, ExpandMore } from '@mui/icons-material';
+import { CssBaseline, IconButton, Button, Box, SwipeableDrawer, Card, Typography } from '@mui/material';
 import Search from '../Search/Search'
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import theme from '../../Theme.jsx';
+import OutlinedCard from './Card';
 
 const drawerBleeding = 56;
 
@@ -32,7 +33,6 @@ function SwipeableEdgeDrawer(props) {
         } else {
             setOpen(!open)
         }
-        console.log("toggled")
     };
 
     // This is used only for the example
@@ -50,9 +50,6 @@ function SwipeableEdgeDrawer(props) {
                     },
                 }}
             />
-            <Box sx={{ textAlign: 'center', pt: 1 }}>
-                <Button onClick={toggleDrawer(true)}>Open</Button>
-            </Box>
             <SwipeableDrawer
                 container={container}
                 anchor="bottom"
@@ -74,25 +71,51 @@ function SwipeableEdgeDrawer(props) {
                         visibility: 'visible',
                         right: 0,
                         left: 0,
+                        width: '100%',
                     }}
                 >
-                    <IconButton sx={{ left: 'calc(50% - 15px)', position: 'absolute', pointerEvents: 'auto', color: 'secondary.main' }} onClick={toggleDrawer()}>
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            pointerEvents: 'auto',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            color: 'secondary.main'
+                        }}
+                        onClick={toggleDrawer()}
+                    >
                         {open ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>
-                    <Search sx={{ pointerEvents: 'auto' }}/>
+                    <Typography sx={{ p: 2, color: 'text.secondary' }}>‎ </Typography>
                 </StyledBox>
+
                 <StyledBox
-                    sx={{
-                        px: 2,
-                        pb: 2,
-                        height: '100%',
-                        overflow: 'auto',
-                    }}
-                >
-                    <Card sx={{ left: '50%', position: 'absolute' }}>womp womp</Card>
-                </StyledBox>
-            </SwipeableDrawer>
-        </Root>
+                        sx={{
+                            px: 2,
+                            pb: 2,
+                            height: '100%',
+                            overflow: 'auto',
+                            width: '100%'
+                        }}
+                    >
+                        {/* Center the Search component horizontally */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center', // Centers horizontally
+                                width: '100%', // Ensure it takes the full width
+                            }}
+                        >
+                            <Search sx={{ pointerEvents: 'auto', width: '80%' }} />
+                        </Box>
+                        <Typography sx={{ p: 2, color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> Favourites </Typography>
+                        <OutlinedCard />
+                        <Typography sx={{ p: 2, color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> History </Typography>
+                        <OutlinedCard />
+                    </StyledBox>
+                </SwipeableDrawer>
+            </Root>
         </ThemeProvider>
     );
 }
