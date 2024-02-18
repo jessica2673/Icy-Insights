@@ -6,6 +6,7 @@ import Drawer from "./components/Drawer/Drawer"
 import { createTheme, ThemeProvider } from "@mui/material";
 import theme from './Theme'; // Import the theme
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import RouteWrapper from "./components/RouteInfo/RouteWrapper";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/sign-up" element={<SignUp />}/>
             <Route path="/search" element={<Search />}/>
             <Route path="/drawer" element={<Drawer />}/>
+            <Route path="/routeinfo" element={<RouteWrapper />}/>
         </Routes>
         </BrowserRouter>
       
