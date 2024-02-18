@@ -4,7 +4,7 @@ import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
 
 
-//const libraries = ['routes'];
+const libraries = ['places'];
 const mapContainerStyle = {
   position: "absolute",
   top: "0px",
@@ -43,8 +43,8 @@ const Map = () => {
   
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY
-    //libraries,
+    googleMapsApiKey:  process.env.REACT_APP_MAPS_API_KEY,
+    libraries,
   });
 
   if (loadError) {

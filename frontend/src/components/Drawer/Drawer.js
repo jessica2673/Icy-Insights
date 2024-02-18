@@ -6,16 +6,20 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { CssBaseline, IconButton, Button, Box, Skeleton, SwipeableDrawer, Card } from '@mui/material';
 import Search from '../Search/Search'
 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import theme from '../../Theme.jsx';
+
 const drawerBleeding = 56;
 
 const Root = styled('div')(({ theme }) => ({
     height: '100%',
-    backgroundColor:
-        theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
+    backgroundColor: theme.palette.primary.main
+        //theme.palette.mode === 'light' ? grey[100] : theme.palette.background.default,
 }));
 
 const StyledBox = styled('div')(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
+    backgroundColor: theme.palette.background.default
+    //backgroundColor: theme.palette.mode === 'light' ? '#fff' : grey[800],
 }));
 
 function SwipeableEdgeDrawer(props) {
@@ -35,6 +39,7 @@ function SwipeableEdgeDrawer(props) {
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
+        <ThemeProvider theme={theme}>
         <Root>
             <CssBaseline />
             <Global
@@ -71,7 +76,7 @@ function SwipeableEdgeDrawer(props) {
                         left: 0,
                     }}
                 >
-                    <IconButton sx={{ left: 'calc(50% - 15px)', position: 'absolute', pointerEvents: 'auto' }} onClick={toggleDrawer()}>
+                    <IconButton sx={{ left: 'calc(50% - 15px)', position: 'absolute', pointerEvents: 'auto', color: 'secondary.main' }} onClick={toggleDrawer()}>
                         {open ? <ExpandMore /> : <ExpandLess />}
                     </IconButton>
                     <Search sx={{ pointerEvents: 'auto' }}/>
@@ -88,6 +93,7 @@ function SwipeableEdgeDrawer(props) {
                 </StyledBox>
             </SwipeableDrawer>
         </Root>
+        </ThemeProvider>
     );
 }
 
