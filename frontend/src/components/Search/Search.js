@@ -26,7 +26,7 @@ const Search = ({ onPathData }) => {
         method: "POST",
         url: "/snow/paths",
         data: formData,
-        headers: {
+        headers: {  
           'Content-Type': 'multipart/form-data'
         }
       })
