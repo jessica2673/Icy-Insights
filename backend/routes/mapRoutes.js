@@ -23,7 +23,7 @@ async function getIntersections() {
     foundIntersections.forEach((intersection) => {
         intersectionCoords.push(intersection.coords);
     })
-    console.log(intersectionCoords);
+    // console.log(intersectionCoords);
     return intersectionCoords;
 }
 
@@ -95,11 +95,11 @@ router.get('/temp', async (req, res) => {
     });
 
     const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes.map(r => r.path));
-    console.log(geoJsonRoutes);
+    // console.log(geoJsonRoutes);
 
     decodedRoutes.forEach((decodedRoute, index) => {
         const singleGeoJsonRoute = geoJsonRoutes[index]; // Assumes convertRoutesToGeoJSON maintains order
-        calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, 50);
+        calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, threshold);
     });
 
     res.status(200).json(plowedPaths.length);
@@ -117,19 +117,19 @@ function haversine(lng1, lat1, lng2, lat2) {
     return R * c;
 }
 
-// JESSICA
 function minDistanceToPlowPath(point, plowedPaths) {
     let min = Infinity;
-    console.log("GEOMETRY");
-    console.log(plowedPaths.geometry);
-    plowedPaths.geometry.coordinates.forEach(coordinate => {
-        const distance = haversine(coordinate[1], coordinate[0], point[1], point[0]);
-        min = Math.min(min, distance);
+    plowedPaths.forEach(path => {
+        const allCoords = path.geometry.coordinates;
+        allCoords.forEach((coord) => {
+            const distance = haversine(coord[0], coord[1], point[1], point[0]);
+            min = Math.min(min, distance);
+        })
     });
     return min;
 }
 
-const threshold = 50;
+const threshold = 5;
 
 async function calculateCoverage(route, plowedPaths, totalPathKm, threshold) {
     let coveredPoints = 0;
