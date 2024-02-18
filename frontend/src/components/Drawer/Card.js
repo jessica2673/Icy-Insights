@@ -4,7 +4,12 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import { Icon } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import WorkIcon from '@mui/icons-material/Work';
+import { Typography } from '@mui/material/';
+import { alignProperty } from '@mui/material/styles/cssUtils';
+
 
 const bull = (
   <Box
@@ -15,34 +20,51 @@ const bull = (
   </Box>
 );
 
-const card = (
+const cardFave = (
   <React.Fragment>
     <CardContent>
-      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-        Word of the Day
-      </Typography>
-      <Typography variant="h5" component="div">
-        be{bull}nev{bull}o{bull}lent
-      </Typography>
-      <Typography sx={{ mb: 1.5 }} color="text.secondary">
-        adjective
-      </Typography>
-      <Typography variant="body2">
-        well meaning and kindly.
-        <br />
-        {'"a benevolent smile"'}
-      </Typography>
+      <Typography sx={{ color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em' }}> Favourites </Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'space-around', // Adjust this as needed
+        alignItems: 'center', // This will vertically center the items if needed
+        width: '100%',
+  
+      }}>
+        {/* Home icon and label */}
+        <Box sx={{ p: 0.5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography sx={{fontSize:'1.1em'}}>Home</Typography>
+          <HomeIcon sx={{fontSize: 60}} />
+        </Box>
+        {/* Work icon and label */}
+        <Box sx={{ p: 0.5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography sx={{fontSize:'1.1em'}}>Work</Typography>
+          <WorkIcon sx={{fontSize: 60}}/>
+        </Box>
+      </Box>
     </CardContent>
-    <CardActions>
-      <Button size="small">Learn More</Button>
-    </CardActions>
+  </React.Fragment>
+);
+
+
+
+const cardHist = (
+  <React.Fragment>
+    <CardContent>
+    <Typography sx={{color: 'text.primary', fontWeight: 'bold', textAlign: 'center', fontSize: '1.5em'}}> History </Typography>
+      <Icon>
+        <HomeIcon></HomeIcon>
+      </Icon>
+    </CardContent>
   </React.Fragment>
 );
 
 export default function OutlinedCard() {
   return (
     <Box sx={{ minWidth: 275 }}>
-      <Card variant="outlined">{card}</Card>
+      <Card variant="outlined">{cardFave}</Card>
+      <br/>
+      <Card variant="outlined">{cardHist}</Card>
     </Box>
   );
 }
