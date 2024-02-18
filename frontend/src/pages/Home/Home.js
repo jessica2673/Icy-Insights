@@ -1,5 +1,5 @@
 import React from 'react';
-import Map from '../../components/Map/Map'
+import Map2 from '../../components/Map/Map2';
 import Drawer from "../../components/Drawer/Drawer"
 import { IconButton } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
@@ -33,7 +33,7 @@ const Home = () => {
       >
         <AccountCircle fontSize="large" sx={{color: 'secondary.main'}} />
       </IconButton>
-      <Map />
+      <Map2 />
       <Drawer />
     </ThemeProvider>
   );
