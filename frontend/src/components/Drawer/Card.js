@@ -32,14 +32,16 @@ const cardFave = (
   
       }}>
         {/* Home icon and label */}
-        <Box sx={{ p: 0.5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <Typography sx={{fontSize:'1.1em'}}>Home</Typography>
           <HomeIcon sx={{fontSize: 60}} />
+          <Typography>257 Cook Rd, Toronto, ON M3J 3T1</Typography>
         </Box>
         {/* Work icon and label */}
-        <Box sx={{ p: 0.5, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <Typography sx={{fontSize:'1.1em'}}>Work</Typography>
           <WorkIcon sx={{fontSize: 60}}/>
+          <Typography>121 Hidden Trail, Toronto, ON M2R 3S2</Typography>
         </Box>
       </Box>
     </CardContent>

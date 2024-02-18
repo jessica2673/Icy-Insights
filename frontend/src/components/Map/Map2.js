@@ -21,6 +21,31 @@ class Map2 extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getUserLocation();
+  }
+
+  getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.setState({
+            currentLocation: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            },
+          });
+        },
+        (error) => {
+          console.error("Error Code = " + error.code + " - " + error.message);
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by this browser.");
+    }
+  };
+
+
   render() {
     const apiIsLoaded = (map, maps) => {
       const geoJsonRoute = {
