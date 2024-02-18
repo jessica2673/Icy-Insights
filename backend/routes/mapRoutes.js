@@ -95,14 +95,38 @@ router.get('/temp', async (req, res) => {
     });
 
     const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes.map(r => r.path));
-    // console.log(geoJsonRoutes);
-
-    decodedRoutes.forEach((decodedRoute, index) => {
-        const singleGeoJsonRoute = geoJsonRoutes[index]; // Assumes convertRoutesToGeoJSON maintains order
-        calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, threshold);
+    let highestCoverage = {
+        percentage: 0.0,
+        routeIndex: 0
+    }
+    let coverage = 0.0;
+    decodedRoutes.forEach(async (decodedRoute, index) => {
+        coverage = calculateCoverage(decodedRoute, plowedPaths, decodedRoute.totalDistanceKm, threshold);
+        console.log(coverage);
+        console.log(highestCoverage.percentage);
+        if (coverage > highestCoverage.percentage) {
+            highestCoverage = { 
+                percentage: coverage, 
+                routeIndex: index
+            };
+        }
     });
 
-    res.status(200).json(plowedPaths.length);
+    const bestRoute = {
+        coverage: highestCoverage.percentage,
+        route: decodedRoutes[highestCoverage.routeIndex]
+    }
+
+    let resultRoutes = [];
+    await resultRoutes.push(bestRoute); // Best route is pushed first.
+    for (let i = 0; i < decodedRoutes.length; ++i) { // Other routes are stored after
+        if (i !== await highestCoverage.routeIndex) {
+            await resultRoutes.push(decodedRoutes[i]);
+        }
+    }
+
+    console.log(resultRoutes);
+    res.status(200).json(resultRoutes);
 });
 
 // distance between points on globe
@@ -131,7 +155,7 @@ function minDistanceToPlowPath(point, plowedPaths) {
 
 const threshold = 5;
 
-async function calculateCoverage(route, plowedPaths, totalPathKm, threshold) {
+function calculateCoverage(route, plowedPaths, totalPathKm, threshold) {
     let coveredPoints = 0;
     let totalPoints = 0;
 
@@ -145,6 +169,7 @@ async function calculateCoverage(route, plowedPaths, totalPathKm, threshold) {
 
     const coveragePercentage = (coveredPoints / totalPoints) * 100;
     console.log(`Coverage percentage: ${coveragePercentage.toFixed(2)}%`);
+    return coveragePercentage.toFixed(2);
 }
 
 function convertRoutesToGeoJSON(decodedRoutes) {
