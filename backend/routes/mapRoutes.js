@@ -20,9 +20,6 @@ async function getGoogleRoutes(start, end) {
             },
             timeout: 10000
         })
-
-        // console.log(response.data.routes);
-
         return response.data.routes;
     } catch (e) {
         console.log('Error: ' + e);
@@ -57,14 +54,12 @@ async function getPlowedData(points) {
         }
         return false;
     });
-
+    
     return filteredFeatures;
 }
 
-
 router.get('/temp', async (req, res) => {
     const {start, end} = req.query;
-    console.log('temp reached');
     const bbPoints = await boundingBox(start, end);
     const plowedPaths = await getPlowedData(bbPoints);
     const routes = await getGoogleRoutes(start, end);
@@ -77,8 +72,29 @@ router.get('/temp', async (req, res) => {
     const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes);
     console.log(geoJsonRoutes);
 
+    const coverage = calculateCoverage(geoJsonRoutes, plowedPaths);
+
     res.status(200).json(plowedPaths.length);
 })
+
+function calculateCoverage(geoJsonRoutes, filteredFeatures) {
+    geoJsonRoutes.forEach(route => {
+        let totalCoverage = 0;
+        let totalPath = turf.length(route, {units: 'kilometers'});
+    
+        filteredFeatures.forEach(feature => {
+            const intersection = turf.lineIntersect(route, feature);
+            if (intersection.features.length > 0) {
+            intersection.features.forEach(segment => {
+                totalCoverage += turf.length(segment, {units: 'kilometers'});
+            });
+            }
+        });
+    
+    console.log(`Total coverage: ${totalCoverage}, Total path length: ${totalPath}`);
+    console.log(`Total coverage for route: ${totalCoverage / totalPath * 100} %`);
+    });
+}
 
 function convertRoutesToGeoJSON(decodedRoutes) {
   return decodedRoutes.map(route => {
