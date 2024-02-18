@@ -73,7 +73,6 @@ router.get('/temp', async (req, res) => {
         const decodedPath = polyline.decode(encodedPath);
         return decodedPath;
     });
-    console.log(decodedRoutes); 
 
     const geoJsonRoutes = convertRoutesToGeoJSON(decodedRoutes);
     console.log(geoJsonRoutes);
@@ -115,9 +114,5 @@ async function boundingBox(start, end) {
 
     return points;
 }
-
-router.post("/plowRoutes", upload.none(), async (req, res) => { 
-    waypoints = nearbyWaypoints(start, end); // lat and lng, find waypoints in one area (1000 m away from box bounded by 2 waypoints)   
-});
 
 module.exports = router;
