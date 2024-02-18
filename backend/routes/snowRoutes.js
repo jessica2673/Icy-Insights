@@ -48,10 +48,10 @@ router.post("/paths", upload.none(), async (req, res) => { // upload.none here i
 
 // Routes below used to create/get intersection for internal use only
 router.post("/add-intersect", async (req, res) => {
-    const name = "Bathurst and Lake Shore Ave. West";
+    const name = "Insert name";
     const coords = {
-        "lat": 43.636531,
-        "lng": -79.399652
+        "lat": 0,
+        "lng": 0
     }
     const newIntersection = {
         "name": name,
@@ -68,7 +68,13 @@ router.post("/add-intersect", async (req, res) => {
 })
 
 router.get('/get-intersect', async(req, res) => {
-    const id = "";
+    const id = "0";
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404);
+    }
+
+    found = await Intersection.findById(id);
+    console.log(found);
 })
 
 module.exports = router;
