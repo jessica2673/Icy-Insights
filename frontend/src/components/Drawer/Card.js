@@ -57,7 +57,8 @@ const CardHist = ({ history }) => {
         {history.length > 0 ? (
           history.map((site, index) => (
             <Box key={index}>
-              <Typography>{site}</Typography>
+              <Typography>Start location: {site.startLocation}</Typography>
+              <Typography>Destination: {site.destination}</Typography>
               <hr />
             </Box>
           ))

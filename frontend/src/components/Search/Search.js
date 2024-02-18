@@ -58,6 +58,11 @@ const Search = ({ onPathData }) => {
     formData.append("start", startLocation);
     formData.append("end", destination);
 
+    if (startLocation === "" || destination === "") {
+      console.log('Please enter a start and end location.');
+      return;
+    }
+
     console.log(typeof(history));
     if (history.length > 0) {
       if (history.includes(destination)) {
@@ -65,12 +70,25 @@ const Search = ({ onPathData }) => {
         return;
       }
     } else {
-      setHistory([destination]);
-      localStorage.setItem('searchHistory', JSON.stringify([destination]));
+      formData.append("start", startLocation);
+      setHistory([{
+        startLocation: startLocation,
+        destination: destination
+      }]);
+      localStorage.setItem('searchHistory', JSON.stringify([{
+        startLocation: startLocation,
+        destination: destination
+      }]));
     }
     
-    setHistory([...history, destination]);
-    localStorage.setItem('searchHistory', JSON.stringify([...history, destination]));
+    setHistory([...history, {
+      startLocation: startLocation,
+      destination: destination
+    }]);
+    localStorage.setItem('searchHistory', JSON.stringify([...history, {
+                                                            startLocation: startLocation,
+                                                            destination: destination
+                                                          }]));
     await sendData(formData);
   }
 
