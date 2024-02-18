@@ -6,8 +6,26 @@ const multer = require('multer');
 const upload = multer();
 const polyline = require('@mapbox/polyline');
 const turf = require('@turf/turf');
+const mongoose = require('mongoose');
+const Intersection = require('../models/intersectionModel');
 
 const client = new Client({});
+
+// Just to get the intersection coordinates from MongoDB
+async function getIntersections() {
+    const foundIntersections = await Intersection.find();
+
+    if (!foundIntersections) {
+        console.log('No intersections found. Check your code.');
+    }
+
+    let intersectionCoords = [];
+    foundIntersections.forEach((intersection) => {
+        intersectionCoords.push(intersection.coords);
+    })
+    console.log(intersectionCoords);
+    return intersectionCoords;
+}
 
 async function getGoogleRoutes(start, end) {
     try {

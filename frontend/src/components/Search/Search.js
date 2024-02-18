@@ -4,7 +4,7 @@ import SearchBar from './SearchBar'
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../../Theme.jsx';
 import axios from 'axios'
-import Map from '../Map/Map.js';
+import { Box } from '@mui/material';
 
 const Search = () => {
   const [startLocation, setStartLocation] = useState('');
@@ -53,29 +53,45 @@ const Search = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className='search-container'>
-        <form encType="multipart/form-data" action="/snow/paths" method="POST" onSubmit={handleSubmit}>
+      <Box 
+        sx={{
+          display: 'flex', // Use flex layout
+          flexDirection: 'column', // Stack children vertically
+          alignItems: 'center', // Center items horizontally in the container
+          width: '100%', // Container takes full width
+        }}
+      >
+        <form 
+          encType="multipart/form-data" 
+          action="/snow/paths" 
+          method="POST" 
+          onSubmit={handleSubmit}
+          style={{
+            display: 'flex', 
+            flexDirection: 'column', // Stack form elements vertically
+            alignItems: 'center', // Center form elements horizontally
+            width: '100%', // Form takes full width of its container
+          }}
+        >
           <SearchBar
             onSearchResult={(e) => setStartLocation(e)}
             searchLabel="Starting Location"
-            sx={{backgroundColor: 'background.paper'}}
+            sx={{ my: 2, width: '100%' }} // Apply vertical margins and set width
           />
-          <br></br>
+          
           <SearchBar
             onSearchResult={(e) => setDestination(e)}
             searchLabel="Destination"
-            sx={{backgroundColor: 'background.paper'}}
+            sx={{ my: 2, width: '75%' }} // Apply vertical margins and set width
           />
-          <br></br>
-
-          <Button type="submit" variant="contained" color="primary">
-            Submit
+          
+          <Button type="submit" variant="contained" color="primary" sx={{ mt: 3 }}>
+            Find Route
           </Button>
         </form>
-      </div>
+      </Box>
     </ThemeProvider>
   );
-}
-
+};
 
 export default Search;

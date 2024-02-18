@@ -2,15 +2,15 @@ import React from 'react';
 import { useState, useEffect } from 'react'; 
 import { GoogleMap, useLoadScript, MarkerF } from '@react-google-maps/api';
 
-
-
-//const libraries = ['routes'];
 const mapContainerStyle = {
   position: "absolute",
-  top: "0px",
-  left: "0px",
-  right: "0px",
-  bottom: "0px", 
+  top: "15px",
+  left: "15px",
+  right: "15px",
+  bottom: "56px",
+  boxShadow: "1px 1px 10px 1px grey",
+  borderTopLeftRadius: "10px",
+  borderTopRightRadius: "10px",
 };
 
 
@@ -62,6 +62,7 @@ const Map = () => {
           mapContainerStyle={mapContainerStyle}
           zoom={15}
           center={location}
+          options={{fullscreenControl: false}}
         >
           <MarkerF position={location} icon={"https://maps.google.com/mapfiles/ms/icons/blue-dot.png"}/>
         </GoogleMap>
