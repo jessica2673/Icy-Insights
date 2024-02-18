@@ -58,6 +58,11 @@ const Search = () => {
     formData.append("start", startLocation);
     formData.append("end", destination);
 
+    if (startLocation === "" || destination === "") {
+      console.log('Please enter a start and end location.');
+      return;
+    }
+
     console.log(typeof(history));
     if (history.length > 0) {
       if (history.includes(destination)) {
